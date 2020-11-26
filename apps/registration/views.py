@@ -32,7 +32,10 @@ def login_view(request):
                    login(request,user)
                    
                    if user.is_superuser:
-                        return HttpResponseRedirect(reverse('administradores:reportes_adm'))
+                        if 'sesion' in context:
+                            return render(request, "core/pantalla_bienvenida_adm.html",context)
+                        else:
+                            return render(request, "administradores/home.html",context)
                    else:
                         if 'sesion' in context:
                             Citas.objects.create(numeral_id = 31,  usuario_id = user.id)
@@ -56,6 +59,7 @@ class ProfileUpdate(View):
         obj = User.objects.get(id=request.user.id)
         nombre = request.POST.get('nombres',obj.nombre)
         apellidos = request.POST.get('apellidos',obj.apellido)
+        correo_alternativo = request.POST.get('correo_alternativo',obj.correoAlternativo)
         nombre_corto = request.POST.get('nombre_corto',obj.nombreCorto)
         categoria = request.POST.get('categoria',obj.categoria)
         nivel_sni = request.POST.get('nivel_sni',obj.nivelSni)
@@ -63,14 +67,10 @@ class ProfileUpdate(View):
         coordinacion = request.POST.get('coordinacion',obj.coordinacion_id)
         #arxiv_id = request.POST.get('arxiv_id',obj.arxivId)
         
-        print(nombre)
-        print(apellidos)
-        print(nombre_corto)
-        print(categoria)
-        print(nivel_sni)
-        print(orcid)
+        print(correo_alternativo)
         print(coordinacion)
         obj.nombre = nombre
+        obj.correoAlternativo =  correo_alternativo
         obj.apellido = apellidos
         obj.nombreCorto = nombre_corto
         obj.categoria = categoria
