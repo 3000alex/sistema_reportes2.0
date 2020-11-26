@@ -1,0 +1,3352 @@
+{% load name %}
+<div id="numeral">
+    <small class="form-text text-muted mb-2">NOTA: Los numerales 1-5, 7, 9, 11-14 y 14a son generados con base en su
+        modelo1, favor de actualizarla.</small>
+    <div class="card">
+        {% for numeral in numeralName %}
+        <div class="card-header">
+
+            <a href="#" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                onclick="icono({{numeral.id}})">{{numeral}}&nbsp;<i
+                    class="fa fa-chevron-down numeral{{numeral.id}}"></i></a>
+            <i onclick="glosario()" style="font-size: 30px; cursor: pointer;" data-toggle="modal"
+                class="far fa-question-circle float-right"></i>
+
+        </div>
+
+        <div id="numeral{{numeral.id}}" class="collapse" data-parent="#numeral">
+            <div class="card-body" style="font-size: 14px;">
+                <!-- Numeral 1 - Q1 modelo1-->
+                {% if numeral.orden == 1 %}
+                <div>
+                    {% for modelo1 in numeral_1 %}
+                    <form id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control" id="autores{{modelo1.id}}" name="autores"
+                                    type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control" id="titulo{{modelo1.id}}" name="titulo"
+                                    type="text" value="{{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacion{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank"
+                                    href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="url{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">DOI/ISBN:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.doi}}"
+                                    name="doi" id="doi{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">BibCode:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.bibcode}}"
+                                    name="bibcode" id="bibcode{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                    value="{{modelo1.fecha}}" name="fecha" id="fecha{{modelo1.id}}"
+                                    placeholder="Ingrese la fecha en formato YYYY/MM">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="estudiantes" class="col-md-2">Estudiante(s):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="estudiantes{{modelo1.id}}"
+                                    name="estudiantes" type="text" value="{{modelo1.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexo{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios">
+                                        <i class="fas fa-save">&nbsp; Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <button onclick="crear_entrada({{numeral.id}} , 'modelo1')" id="modelo1Crear{{numeral.id}}"
+                        type="button" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp; Agregar
+                        entrada</button>
+                    <p data-toggle="collapse" data-target="#numeral{{numeral.id}}" style="cursor: pointer;"
+                        class="text-primary link float-right">Cerrar&nbsp; <i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Fin Numeral 1 - Q1 modelo1-->
+
+                <!-- Numeral 2 - Q2 y Q3 modelo1-->
+                {% if numeral.orden == 2 %}
+                <div>
+                    {% for modelo1 in numeral_2 %}
+                    <form class="pt-2 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autores{{modelo1.id}}" name="autores"
+                                    type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="titulo{{modelo1.id}}" name="titulo"
+                                    type="text" value="{{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacion{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank"
+                                    href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="url{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">BibCode:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.bibcode}}"
+                                    name="bibcode" id="bibcode{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">DOI/ISBN:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.doi}}"
+                                    name="doi" id="doi{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                    value="{{modelo1.fecha}}" name="fecha" id="fecha{{modelo1.id}}"
+                                    placeholder="Ingrese la fecha en formato YYYY/MM">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="estudiantes" class="col-md-2">Estudiante(s):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="estudiantes{{modelo1.id}}"
+                                    name="estudiantes"" type=" text" value="{{modelo1.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexo{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+
+                    {% endfor %}
+                    <button onclick="crear_entrada({{numeral.id}} , 'modelo1')" id="modelo1Crear{{numeral.id}}"
+                        type="button" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp; Agregar
+                        entrada</button>
+                    <p data-toggle="collapse" data-target="#numeral{{numeral.id}}" style="cursor: pointer;"
+                        class="text-primary link float-right">Cerrar&nbsp; <i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!-- Numeral 2 - Fin Q2 y Q3 modelo1-->
+
+                <!-- Numeral 3 - Q4 modelo1-->
+                {% if numeral.orden == 3 %}
+                <div>
+                    {% for modelo1 in numeral_3 %}
+                    <form class="pt-2 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autores{{modelo1.id}}" name="autores"
+                                    type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="titulo{{modelo1.id}}" name="titulo"
+                                    type="text" value="{{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacion{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank"
+                                    href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="url{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">BibCode:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.bibcode}}"
+                                    name="bibcode" id="bibcode{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">DOI/ISBN:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.doi}}"
+                                    name="doi" id="doi{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                    value="{{modelo1.fecha}}" name="fecha" id="fecha{{modelo1.id}}"
+                                    placeholder="Ingrese la fecha en formato YYYY/MM">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="estudiantes" class="col-md-2">Estudiante(s):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="estudiantes{{modelo1.id}}"
+                                    name="estudiantes"" type=" text" value="{{modelo1.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexo{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <button id="modelo1Crear{{numeral.id}}" onclick="crear_entrada({{numeral.id}} , 'modelo1')"
+                        type="button" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp; Agregar
+                        entrada</button>
+                    <p data-toggle="collapse" data-target="#numeral{{numeral.id}}" style="cursor: pointer;"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+
+                </div>
+                {% endif %}
+                <!--Fin Numeral 3 - Q4 modelo1-->
+
+                <!-- Numeral 4 - modelo1-->
+                {% if numeral.orden == 4 %}
+                <div>
+                    {% for modelo1 in numeral_4 %}
+
+                    <form class="pt-2 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autores{{modelo1.id}}" name="autores"
+                                    type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="titulo{{modelo1.id}}" name="titulo"
+                                    type="text" value="{{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacion{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank"
+                                    href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="url{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">BibCode:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.bibcode}}"
+                                    name="bibcode" id="bibcode{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">DOI/ISBN:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.doi}}"
+                                    name="doi" id="doi{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                    value="{{modelo1.fecha}}" name="fecha" id="fecha{{modelo1.id}}"
+                                    placeholder="Ingrese la fecha en formato YYYY/MM">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="estudiantes" class="col-md-2">Estudiante(s):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="estudiantes{{modelo1.id}}"
+                                    name="estudiantes"" type=" text" value="{{modelo1.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexo{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong><p class="text-center ">Sin entradas</p></strong>
+                    </div>
+                    {% endfor %}
+                    <button id="modelo1Crear{{numeral.id}}" onclick="crear_entrada({{numeral.id}} , 'modelo1')"
+                        type="button" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp; Agregar
+                        entrada</button>
+                    <p data-toggle="collapse" data-target="#numeral{{numeral.id}}" style="cursor: pointer;"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Fin Numeral 4 - -->
+
+                <!--Numeral 5to desde modelo1-->
+                {% if numeral.orden == 5 %}
+                <div>
+                    {% for modelo1 in numeral_5 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autores{{modelo1.id}}" name="autores"
+                                    type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="titulo{{modelo1.id}}" name="titulo"
+                                    type="text" value="{{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacion{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank"
+                                    href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="url{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">BibCode:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.bibcode}}"
+                                    name="bibcode" id="bibcode{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">DOI/ISBN:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.doi}}"
+                                    name="doi" id="doi{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                    value="{{modelo1.fecha}}" name="fecha" id="fecha{{modelo1.id}}"
+                                    placeholder="Ingrese la fecha en formato YYYY/MM">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="estudiantes" class="col-md-2">Estudiante(s):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="estudiantes{{modelo1.id}}"
+                                    name="estudiantes"" type=" text" value="{{modelo1.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexo{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <button id="modelo1Crear{{numeral.id}}" onclick="crear_entrada({{numeral.id}} , 'modelo1')"
+                        type="button" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp; Agregar
+                        entrada</button>
+                    <p data-toggle="collapse" data-target="#numeral{{numeral.id}}" style="cursor: pointer;"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Numeral 5to fin-->
+
+                <!--Numeral 6 Modelo1 -->
+                {% if numeral.orden == 6 %}
+                <div>
+                    {% for modelo1 in numeral_6 %}
+                    <form class="pt-4 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autoresModelo1{{modelo1.id}}"
+                                    name="autores" type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="tituloModelo1{{modelo1.id}}" name="titulo"
+                                    type="text" value="{{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacionModelo1{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank" href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="urlModelo1{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="DOI/ISBN" class="col-md-2 ">DOI/ISBN: </label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" value="{{modelo1.doi}}" type="text" name="doi"
+                                    id="doiModelo1{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                    value="{{modelo1.fecha}}" name="fecha" id="fechaModelo1{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="estudiantes" class="col-md-2 ">Estudiante(s):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="estudiantesModelo1{{modelo1.id}}"
+                                    name="estudiantes"" type=" text" value="{{modelo1.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo1{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar " title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada">
+                                        <i class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+
+                    <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                        id="infoAnteriorModelo1{{numeral.id}}" onclick="Modelo1.infoAnterior({{numeral.id}})">Importar
+                        periodo
+                        anterior</button>
+                    {% endfor %}
+                    <div class="w-100 mt-2"></div>
+                    <button onclick="crear_entrada({{numeral.id}} , 'modelo1')" type="button"
+                        id="modelo1Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p data-toggle="collapse" data-target="#numeral{{numeral.id}}" style="cursor: pointer;"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+
+                </div>
+                {% endif %}
+                <!-- Fin Numeral 6 Modelo1 -->
+
+                <!--Numeral 7 desde modelo1-->
+                {% if numeral.orden == 7 %}
+                <div>
+                    {% for modelo1 in numeral_7 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autores{{modelo1.id}}" name="autores"
+                                    type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="titulo{{modelo1.id}}" name="titulo"
+                                    type="text" value="{{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacion{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank"
+                                    href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="url{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">BibCode:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.bibcode}}"
+                                    name="bibcode" id="bibcode{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">DOI/ISBN:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.doi}}"
+                                    name="doi" id="doi{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                    value="{{modelo1.fecha}}" name="fecha" id="fecha{{modelo1.id}}"
+                                    placeholder="Ingrese la fecha en formato YYYY/MM">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="estudiantes" class="col-md-2">Estudiante(s):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="estudiantes{{modelo1.id}}"
+                                    name="estudiantes"" type=" text" value="{{modelo1.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexo{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <button id="modelo1Crear{{numeral.id}}" onclick="crear_entrada({{numeral.id}} , 'modelo1')"
+                        type="button" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp; Agregar
+                        entrada</button>
+                    <p data-toggle="collapse" data-target="#numeral{{numeral.id}}" style="cursor: pointer;"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Numeral 7 fin-->
+
+                <!--Numeral 8 Modelo1 -->
+                {% if numeral.orden == 8 %}
+                <div>
+                    {% for modelo1 in numeral_8 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autoresModelo1{{modelo1.id}}"
+                                    name="autores" type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="tituloModelo1{{modelo1.id}}" name="titulo"
+                                    type="text" value="{{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacionModelo1{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank" href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="urlModelo1{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                    value="{{modelo1.fecha}}" name="fecha" id="fechaModelo1{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="estudiantes" class="col-md-2">Estudiante(s):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="estudiantesModelo1{{modelo1.id}}"
+                                    name="estudiantes"" type=" text" value="{{modelo1.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo1{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                        id="infoAnteriorModelo1{{numeral.id}}" onclick="Modelo1.infoAnterior({{numeral.id}})">Importar
+                        periodo
+                        anterior</button>
+                    {% endfor %}
+                    <div class="w-100 mt-2"></div>
+                    <button onclick="crear_entrada({{numeral.id}} , 'modelo1')" type="button"
+                        id="modelo1Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!-- Fin Numeral 8 Modelo1 -->
+
+                <!--Numeral 9 desde modelo1-->
+                {% if numeral.orden == 9 %}
+                <div>
+                    {% for modelo1 in numeral_9 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autores{{modelo1.id}}" name="autores"
+                                    type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="titulo{{modelo1.id}}" name="titulo"
+                                    type="text" value="{{modelo1.titulo}}">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacion{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                    value="{{modelo1.fecha}}" name="fecha" id="fecha{{modelo1.id}}"
+                                    placeholder="Ingrese la fecha en formato YYYY/MM">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="estudiantes" class="col-md-2">Estudiante(s):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="estudiantes{{modelo1.id}}"
+                                    name="estudiantes"" type=" text" value="{{modelo1.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexo{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white">&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada">
+                                        <i class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong><p class="text-center ">Sin entradas</p></strong>
+                    </div>
+                    {% endfor %}
+                    <button onclick="crear_entrada({{numeral.id}} , 'modelo1')" id="modelo1Crear{{numeral.id}}"
+                        type="button" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp; Agregar
+                        entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Numeral 9 fin-->
+
+                <!--Numeral 10 Modelo1 -->
+                {% if numeral.orden == 10 %}
+                <div>
+                    {% for modelo1 in numeral_10 %}
+                    <form class="pt-4 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autoresModelo1{{modelo1.id}}"
+                                    name="autores" type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="tituloModelo1{{modelo1.id}}" name="titulo"
+                                    type="text" value=" {{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacionModelo1{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                    value="{{modelo1.fecha}}" name="fecha" id="fechaModelo1{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="estudiantes" class="col-md-2 ">Estudiante(s):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="estudiantesModelo1{{modelo1.id}}"
+                                    name="estudiantes"" type=" text" value="{{modelo1.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo1{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar " title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar " title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <button onclick="crear_entrada({{numeral.id}} , 'modelo1')" type="button"
+                        id="modelo1Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!-- Fin Numeral 10 Modelo1 -->
+
+                <!--Numeral 11 desde modelo1-->
+                {% if numeral.orden == 11 %}
+                <div>
+                    {% for modelo1 in numeral_11 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+                        <div>
+
+                            <div class="form-group row">
+                                <label for="autores" class="col-md-2 ">Autor(es):</label>
+                                <div class="col-md-10">
+                                    <input disabled class="mb-1 form-control" id="autores{{modelo1.id}}"
+                                        name="autores" type="text" value="{{modelo1.autores}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="titulo" class="col-md-2 ">Titulo:</label>
+                                <div class="col-md-10">
+                                    <input disabled class="mb-1 form-control" id="titulo{{modelo1.id}}" name="titulo"
+                                        type="text" value="{{modelo1.titulo}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                                <div class="col-md-10">
+                                    <input disabled class="mb-1 form-control" id="revista_publicacion{{modelo1.id}}"
+                                        name="revista_publicacion" value="{{modelo1.revista_publicacion}}"
+                                        type="text">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="url" class="col-md-2 "><a target="blank"
+                                        href="{{modelo1.url}}">URL:</a></label>
+                                <div class="col-md-10">
+                                    <input disabled class="mb-1 form-control" id="url{{modelo1.id}}" name="url"
+                                        type="url" value="{{modelo1.url}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="" class="col-md-2 ">BibCode:</label>
+                                <div class="col-md-10">
+                                    <input disabled class="form-control mb-1" type="text" value="{{modelo1.bibcode}}"
+                                        name="bibcode" id="bibcode{{modelo1.id}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="" class="col-md-2 ">DOI/ISBN:</label>
+                                <div class="col-md-10">
+                                    <input disabled class="form-control mb-1" type="text" value="{{modelo1.doi}}"
+                                        name="doi" id="doi{{modelo1.id}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="" class="col-md-2 ">Fecha:</label>
+                                <div class="col-md-10">
+                                    <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                        value="{{modelo1.fecha}}" name="fecha" id="fecha{{modelo1.id}}"
+                                        placeholder="Ingrese la fecha en formato YYYY/MM">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="estudiantes" class="col-md-2">Estudiante(s):</label>
+                                <div class="col-md-10">
+                                    <input disabled class="mb-1 form-control" id="estudiantes{{modelo1.id}}"
+                                        name="estudiantes"" type=" text" value="{{modelo1.estudiantes}}">
+                                </div>
+                            </div>
+
+                            <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                                id="anexo{{modelo1.id}}">
+                            <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                            {%if modelo1.anexo %}
+                            <strong>Actualmente: </strong><a
+                                href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                            {% endif %}
+
+                            <div class="justify-content-end d-flex">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <button type="button" class="btn btn-success actualizar"
+                                            title="Guardar cambios"><i class="fas fa-save">&nbsp;
+                                                Guardar</i></button>
+
+                                        <button class="btn btn-warning text-white editar" type="reset">
+                                            <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                        <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                                class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                        <button type="button" class="btn btn-danger eliminar"
+                                            title="Eliminar entrada"><i
+                                                class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <button id="modelo1Crear{{numeral.id}}" onclick="crear_entrada({{numeral.id}} , 'modelo1')"
+                        type="button" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp; Agregar
+                        entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Numeral 11 fin-->
+
+                <!--Numeral 12 desde modelo1-->
+                {% if numeral.orden == 12 %}
+                <div>
+                    {% for modelo1 in numeral_12 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autores{{modelo1.id}}" name="autores"
+                                    type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="titulo{{modelo1.id}}" name="titulo"
+                                    type="text" value="{{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacion{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank"
+                                    href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="url{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">BibCode:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.bibcode}}"
+                                    name="bibcode" id="bibcode{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">DOI/ISBN:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.doi}}"
+                                    name="doi" id="doi{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                    value="{{modelo1.fecha}}" name="fecha" id="fecha{{modelo1.id}}"
+                                    placeholder="Ingrese la fecha en formato YYYY/MM">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="estudiantes" class="col-md-2">Estudiante(s):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="estudiantes{{modelo1.id}}"
+                                    name="estudiantes"" type=" text" value="{{modelo1.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexo{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <button id="modelo1Crear{{numeral.id}}" onclick="crear_entrada({{numeral.id}} , 'modelo1')"
+                        type="button" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp; Agregar
+                        entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Numeral 12 fin-->
+
+                <!--Numeral 13 desde modelo1-->
+                {% if numeral.orden == 13 %}
+                <div>
+                    {% for modelo1 in numeral_13 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autores{{modelo1.id}}" name="autores"
+                                    type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="titulo{{modelo1.id}}" name="titulo"
+                                    type="text" value="{{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacion{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank"
+                                    href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="url{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">BibCode:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.bibcode}}"
+                                    name="bibcode" id="bibcode{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">DOI/ISBN:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.doi}}"
+                                    name="doi" id="doi{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                    value="{{modelo1.fecha}}" name="fecha" id="fecha{{modelo1.id}}"
+                                    placeholder="Ingrese la fecha en formato YYYY/MM">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="estudiantes" class="col-md-2">Estudiante(s):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="estudiantes{{modelo1.id}}"
+                                    name="estudiantes"" type=" text" value="{{modelo1.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexo{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <button id="modelo1Crear{{numeral.id}}" onclick="crear_entrada({{numeral.id}} , 'modelo1')"
+                        type="button" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp; Agregar
+                        entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Numeral 13 fin-->
+
+                <!--Numeral 14 desde modelo1-->
+                {% if numeral.orden == 14 %}
+                <div>
+                    {% for modelo1 in numeral_14 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autores{{modelo1.id}}" name="autores"
+                                    type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="titulo{{modelo1.id}}" name="titulo"
+                                    type="text" value="{{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacion{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank"
+                                    href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="url{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">BibCode:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.bibcode}}"
+                                    name="bibcode" id="bibcode{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">DOI/ISBN:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.doi}}"
+                                    name="doi" id="doi{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                    value="{{modelo1.fecha}}" name="fecha" id="fecha{{modelo1.id}}"
+                                    placeholder="Ingrese la fecha en formato YYYY/MM">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="estudiantes" class="col-md-2">Estudiante(s):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="estudiantes{{modelo1.id}}"
+                                    name="estudiantes"" type=" text" value="{{modelo1.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexo{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+
+                    {% endfor %}
+                    <button id="modelo1Crear{{numeral.id}}" onclick="crear_entrada({{numeral.id}} , 'modelo1')"
+                        type="button" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp; Agregar
+                        entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Numeral 14 fin-->
+
+                <!--Numeral 14a desde modelo1-->
+                {% if numeral.orden == 14.1 %}
+                <div>
+                    {% for modelo1 in numeral_14a %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autores{{modelo1.id}}" name="autores"
+                                    type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="titulo{{modelo1.id}}" name="titulo"
+                                    type="text" value="{{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacion{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank"
+                                    href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="url{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">BibCode:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.bibcode}}"
+                                    name="bibcode" id="bibcode{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">DOI/ISBN:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" value="{{modelo1.doi}}"
+                                    name="doi" id="doi{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input maxlength="7" disabled class="form-control mb-1" type="text"
+                                    value="{{modelo1.fecha}}" name="fecha" id="fecha{{modelo1.id}}"
+                                    placeholder="Ingrese la fecha en formato YYYY/MM">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="estudiantes" class="col-md-2">Estudiante(s):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="estudiantes{{modelo1.id}}"
+                                    name="estudiantes"" type=" text" value="{{modelo1.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexo{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <button id="modelo1Crear{{numeral.id}}" onclick="crear_entrada({{numeral.id}} , 'modelo1')"
+                        type="button" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp; Agregar
+                        entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Numeral 14a fin-->
+
+                <!--Numeral 15 Modelo1 -->
+                {% if numeral.orden == 15 %}
+                <div>
+                    {% for modelo1 in numeral_15 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autoresModelo1{{modelo1.id}}"
+                                    name="autores" type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="tituloModelo1{{modelo1.id}}" name="titulo"
+                                    type="text" value=" {{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacionModelo1{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank" href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="urlModelo1{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="DOI/ISBN" class="col-md-2 ">DOI/ISBN: </label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" value="{{modelo1.doi}}" type="text" name="doi"
+                                    id="doiModelo1{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo1{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar " title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar " title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+
+                    {% endfor %}
+
+                    <button onclick="crear_entrada({{numeral.id}} , 'modelo1')" type="button"
+                        id="modelo1Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!-- Fin Numeral 15 Modelo1 -->
+
+                <!--Numeral 16 Modelo1 -->
+                {% if numeral.orden == 16 %}
+                <div>
+                    {% for modelo1 in numeral_16 %}
+                    <form class="pt-4 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autoresModelo1{{modelo1.id}}"
+                                    name="autores" type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="tituloModelo1{{modelo1.id}}" name="titulo"
+                                    type="text" value=" {{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacionModelo1{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank" href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="urlModelo1{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="DOI/ISBN" class="col-md-2 ">DOI/ISBN: </label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" value="{{modelo1.doi}}" type="text" name="doi"
+                                    id="doiModelo1{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo1{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar " title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar " title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <button onclick="crear_entrada({{numeral.id}} , 'modelo1')" type="button"
+                        id="modelo1Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!-- Fin Numeral 16 Modelo1 -->
+
+                <!--Numeral 17 Modelo1 -->
+                {% if numeral.orden == 17 %}
+                <div>
+                    {% for modelo1 in numeral_17 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo1/{{modelo1.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="autores" class="col-md-2 ">Autor(es):</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="autoresModelo1{{modelo1.id}}"
+                                    name="autores" type="text" value="{{modelo1.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="titulo" class="col-md-2 ">Titulo:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="tituloModelo1{{modelo1.id}}" name="titulo"
+                                    type="text" value=" {{modelo1.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="revista" class="col-md-2 ">Revista o Publicación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="revista_publicacionModelo1{{modelo1.id}}"
+                                    name="revista_publicacion" value="{{modelo1.revista_publicacion}}" type="text">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 "><a target="blank" href="{{modelo1.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="urlModelo1{{modelo1.id}}" name="url"
+                                    type="url" value="{{modelo1.url}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="DOI/ISBN" class="col-md-2 ">DOI/ISBN: </label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" value="{{modelo1.doi}}" type="text" name="doi"
+                                    id="doiModelo1{{modelo1.id}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo1{{modelo1.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo1.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo1.anexo.url}}">{{modelo1.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar " title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar " title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <button onclick="crear_entrada({{numeral.id}} , 'modelo1')" type="button"
+                        id="modelo1Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!-- Fin Numeral 17 Modelo1 -->
+
+                <!--Numerales 18 Modelo2 -->
+                {% if numeral.orden == 18 %}
+                <div>
+                    {% for modelo2 in numeral_18 %}
+                    <form class="pt-4 pr-4 pl-4" id="modelo2/{{modelo2.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="nombre_del_proyecto" class="col-md-2">Nombre del proyecto:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="nombre_del_proyecto"
+                                    id="nombre_del_proyectoModelo2{{modelo2.id}}"
+                                    value="{{modelo2.nombre_del_proyecto}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="Participantes" class="col-md-2">Participantes:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="participantes"
+                                    id="participantesModelo2{{modelo2.id}}" value="{{modelo2.participantes}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="Estudiantes" class="col-md-2">Estudiantes:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="estudiantes"
+                                    id="estudiantesModelo2{{modelo2.id}}" value="{{modelo2.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="rol" class="col-md-2">Rol:</label>
+                            <div class="col-md-10">
+                                <select disabled class="form-control mb-1" name="rol" required
+                                    id="responsableModelo2{{modelo2.id}}">
+                                    <option selected disabled value="{{modelo2.rol}}">
+                                        {% if modelo2.rol %}
+                                        {{modelo2.rol}}
+                                        {% else %}
+                                        --------------------
+                                        {% endif %}
+                                    </option>
+                                    <option value="Responsable técnico">Responsable técnico</option>
+                                    <option value="Participante">Participante</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <label for="Descripcion">Descripcion</label>
+                        <textarea disabled class="form-control mb-1" name="descripcion"
+                            id="descripcionModelo2{{modelo2.id}}" cols="30" rows="5">{{modelo2.descripcion}}</textarea>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo2{{modelo2.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo2.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo2.anexo.url}}">{{modelo2.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada">
+                                        <i class="fas fa-edit">&nbsp;Editar</i></button>
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+
+                    <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                        id="infoAnteriorModelo2{{numeral.id}}" onclick="Modelo2.infoAnterior({{numeral.id}})">Importar
+                        periodo anterior</button>
+                    {% endfor %}
+                    <div class="w-100"></div>
+                    <button onclick="crear_entrada({{numeral.id}}, 'modelo2')" type="button"
+                        id="modelo2Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Fin Numerales 18 Modelo2 -->
+
+                <!--Numerales 19 Modelo2 -->
+                {% if numeral.orden == 19 %}
+                <div>
+                    {% for modelo2 in numeral_19 %}
+                    <form class="pt-4 pr-4 pl-4" id="modelo2/{{modelo2.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="nombre_del_proyecto" class="col-md-2">Nombre del proyecto:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="nombre_del_proyecto"
+                                    id="nombre_del_proyectoModelo2{{modelo2.id}}"
+                                    value="{{modelo2.nombre_del_proyecto}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="Participantes" class="col-md-2">Participantes:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="participantes"
+                                    id="participantesModelo2{{modelo2.id}}" value="{{modelo2.participantes}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="Estudiantes" class="col-md-2">Estudiantes:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="estudiantes"
+                                    id="estudiantesModelo2{{modelo2.id}}" value="{{modelo2.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="rol" class="col-md-2">Rol:</label>
+                            <div class="col-md-10">
+                                <select disabled class="form-control mb-1" name="rol" required
+                                    id="responsableModelo2{{modelo2.id}}">
+                                    <option selected disabled value="{{modelo2.rol}}">
+                                        {% if modelo2.rol == ""  %}
+                                        --------------------
+                                        {% else %}
+                                        {{modelo2.rol}}
+                                        {% endif %}
+                                    </option>
+                                    <option value="Responsable técnico">Responsable técnico</option>
+                                    <option value="Participante">Participante</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <label for="Descripcion">Descripcion</label>
+                        <textarea disabled class="form-control mb-1" name="descripcion"
+                            id="descripcionModelo2{{modelo2.id}}" cols="30" rows="5">{{modelo2.descripcion}}</textarea>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo2{{modelo2.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo2.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo2.anexo.url}}">{{modelo2.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar  "
+                                        title="Guardar cambios"><i class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada">
+                                        <i class="fas fa-edit">&nbsp;Editar</i></button>
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                        id="infoAnteriorModelo2{{numeral.id}}" onclick="Modelo2.infoAnterior({{numeral.id}})">Importar
+                        periodo anterior</button>
+                    {% endfor %}
+                    <div class="w-100 mt-2"></div>
+                    <button onclick="crear_entrada({{numeral.id}}, 'modelo2')" type="button"
+                        id="modelo2Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" class="text-primary link float-right">Cerrar&nbsp;<i
+                            class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Fin Numerales 19 Modelo2 -->
+
+                <!--Numerales 20 Modelo2 -->
+                {% if numeral.orden == 20 %}
+                <div>
+                    {% for modelo2 in numeral_20 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo2/{{modelo2.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="nombre_del_proyecto" class="col-md-2">Nombre del proyecto:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="nombre_del_proyecto"
+                                    id="nombre_del_proyectoModelo2{{modelo2.id}}"
+                                    value="{{modelo2.nombre_del_proyecto}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="Participantes" class="col-md-2">Participantes:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="participantes"
+                                    id="participantesModelo2{{modelo2.id}}" value="{{modelo2.participantes}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="Estudiantes" class="col-md-2">Estudiantes:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="estudiantes"
+                                    id="estudiantesModelo2{{modelo2.id}}" value="{{modelo2.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="rol" class="col-md-2">Rol:</label>
+                            <div class="col-md-10">
+                                <select disabled class="form-control mb-1" name="rol" required
+                                    id="responsableModelo2{{modelo2.id}}">
+                                    <option selected disabled value="{{modelo2.rol}}">
+                                        {% if modelo2.rol %}
+                                        {{modelo2.rol}}
+                                        {% else %}
+                                        --------------------
+                                        {% endif %}
+                                    </option>
+                                    <option value="Responsable técnico">Responsable técnico</option>
+                                    <option value="Participante">Participante</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <label for="Descripcion">Descripcion</label>
+                        <textarea disabled class="form-control mb-1" name="descripcion"
+                            id="descripcionModelo2{{modelo2.id}}" cols="30" rows="5">{{modelo2.descripcion}}</textarea>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo2{{modelo2.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo2.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo2.anexo.url}}">{{modelo2.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada">
+                                        <i class="fas fa-edit">&nbsp;Editar</i></button>
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                        id="infoAnteriorModelo2{{numeral.id}}" onclick="Modelo2.infoAnterior({{numeral.id}})">Importar
+                        periodo
+                        anterior</button>
+                    {% endfor %}
+                    <div class="w-100 mt-2"></div>
+                    <button onclick="crear_entrada({{numeral.id}}, 'modelo2')" type="button"
+                        id="modelo2Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" class="text-primary link float-right">Cerrar&nbsp;<i
+                            class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Fin Numerales 20 Modelo2 -->
+
+                <!--Numerales 21 Modelo2 -->
+                {% if numeral.orden == 21 %}
+                <div>
+                    {% for modelo2 in numeral_21 %}
+                    <form class="pt-4 pr-4 pl-4" id="modelo2/{{modelo2.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="nombre_del_proyecto" class="col-md-2">Nombre del proyecto:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="nombre_del_proyecto"
+                                    id="nombre_del_proyectoModelo2{{modelo2.id}}"
+                                    value="{{modelo2.nombre_del_proyecto}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="Participantes" class="col-md-2">Participantes:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="participantes"
+                                    id="participantesModelo2{{modelo2.id}}" value="{{modelo2.participantes}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="Estudiantes" class="col-md-2">Estudiantes:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="estudiantes"
+                                    id="estudiantesModelo2{{modelo2.id}}" value="{{modelo2.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="rol" class="col-md-2">Rol:</label>
+                            <div class="col-md-10">
+                                <select disabled class="form-control mb-1" name="rol" required
+                                    id="responsableModelo2{{modelo2.id}}">
+                                    <option selected disabled value="{{modelo2.rol}}">
+                                        {% if modelo2.rol %}
+                                        {{modelo2.rol}}
+                                        {% else %}
+                                        --------------------
+                                        {% endif %}
+                                    </option>
+                                    <option value="Responsable técnico">Responsable técnico</option>
+                                    <option value="Participante">Participante</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <label for="Descripcion">Descripcion</label>
+                        <textarea disabled class="form-control mb-1" name="descripcion"
+                            id="descripcionModelo2{{modelo2.id}}" cols="30" rows="5">{{modelo2.descripcion}}</textarea>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo2{{modelo2.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo2.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo2.anexo.url}}">{{modelo2.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada">
+                                        <i class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                        id="infoAnteriorModelo2{{numeral.id}}" onclick="Modelo2.infoAnterior({{numeral.id}})">Importar
+                        periodo
+                        anterior</button>
+                    {% endfor %}
+                    <div class="w-100 mt-2"></div>
+                    <button onclick="crear_entrada({{numeral.id}}, 'modelo2')" type="button"
+                        id="modelo2Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Fin Numerales 21 Modelo2 -->
+
+                <!--Numerales 22 Modelo2 -->
+                {% if numeral.orden == 22 %}
+                <div>
+                    {% for modelo2 in numeral_22 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo2/{{modelo2.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="nombre_del_proyecto" class="col-md-2">Nombre del proyecto:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="nombre_del_proyecto"
+                                    id="nombre_del_proyectoModelo2{{modelo2.id}}"
+                                    value="{{modelo2.nombre_del_proyecto}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="Participantes" class="col-md-2">Participantes:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="participantes"
+                                    id="participantesModelo2{{modelo2.id}}" value="{{modelo2.participantes}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="Estudiantes" class="col-md-2">Estudiantes:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="estudiantes"
+                                    id="estudiantesModelo2{{modelo2.id}}" value="{{modelo2.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="rol" class="col-md-2">Rol:</label>
+                            <div class="col-md-10">
+                                <select disabled class="form-control mb-1" name="rol" required
+                                    id="responsableModelo2{{modelo2.id}}">
+                                    <option selected disabled value="{{modelo2.rol}}">
+                                        {% if modelo2.rol %}
+                                        {{modelo2.rol}}
+                                        {% else %}
+                                        --------------------
+                                        {% endif %}
+                                    </option>
+                                    <option value="Responsable técnico">Responsable técnico</option>
+                                    <option value="Participante">Participante</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <label for="Descripcion">Descripcion</label>
+                        <textarea disabled class="form-control mb-1" name="descripcion"
+                            id="descripcionModelo2{{modelo2.id}}" cols="30" rows="5">{{modelo2.descripcion}}</textarea>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo2{{modelo2.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo2.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo2.anexo.url}}">{{modelo2.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar  "
+                                        title="Guardar cambios"><i class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada">
+                                        <i class="fas fa-edit">&nbsp;Editar</i></button>
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                        id="infoAnteriorModelo2{{numeral.id}}" onclick="Modelo2.infoAnterior({{numeral.id}})">Importar
+                        periodo
+                        anterior</button>
+                    {% endfor %}
+                    <div class="w-100"></div>
+                    <button onclick="crear_entrada({{numeral.id}}, 'modelo2')" type="button"
+                        id="modelo2Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" class="text-primary link float-right">Cerrar&nbsp;<i
+                            class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Fin Numerales 22 Modelo2 -->
+
+                <!-- Numeral 23 Modelo3-->
+                {% if numeral.orden == 23 %}
+                <div>
+                    {% for modelo3 in numeral_23 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo3/{{modelo3.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="conferencia_proyecto" class="col-md-2 ">Conferencia o
+                                proyecto:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="conferencia_proyectoModelo3{{modelo3.id}}"
+                                    name="conferencia_proyecto" type="text" value="{{modelo3.conferencia_proyecto}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="rol" class="col-md-2 ">Rol:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="rolModelo3{{modelo3.id}}" name="rol"
+                                    type="text" value="{{modelo3.rol}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="url" class="col-md-2 ">URL:</label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="urlModelo3{{modelo3.id}}" name="url"
+                                    value="{{modelo3.url}}" type="text">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="fecha" class="col-md-2 ">Fecha: </label>
+                            <div class="col-md-10">
+                                <input disabled class="mb-1 form-control" id="fechaModelo3{{modelo3.id}}" name="fecha"
+                                    type="text" value="{{modelo3.fecha}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo3{{modelo3.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo3.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo3.anexo.url}}">{{modelo3.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar  "
+                                        title="Guardar cambios"><i class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white">&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" id="{{modelo3.id}}"
+                                        title="Editar entrada"><i class="fas fa-edit">&nbsp;Editar</i></button>
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                    <hr>
+
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+
+                    <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                        id="infoAnteriorModelo3{{numeral.id}}" onclick="Modelo3.infoAnterior({{numeral.id}})">Importar
+                        periodo
+                        anterior</button>
+
+                    {% endfor %}
+                    <div class="w-100"></div>
+                    <button onclick="crear_entrada({{numeral.id}}, 'modelo3')" type="button"
+                        id="modelo3Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!-- Fin Numeral 23 Modelo3 -->
+
+                <!--Numeral 24 Modelo4-->
+                {% if numeral.orden == 24 %}
+                <div>
+                    {% for modelo4 in numeral_24 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo4/{{modelo4.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Título de la presentación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="titulo"
+                                    id="tituloModelo4{{modelo4.id}}" value="{{modelo4.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Autores:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="autores"
+                                    id="autoresModelo4{{modelo4.id}}" value="{{modelo4.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Nombre conferencia:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="nombre_de_conferencia"
+                                    id="nombre_de_conferenciaModelo4{{modelo4.id}}"
+                                    value="{{modelo4.nombre_de_conferencia}}">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="fecha"
+                                    id="fechaModelo4{{modelo4.id}}" value="{{modelo4.fecha}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Tipo de presentación:</label>
+                            <div class="col-md-10">
+                                <select disabled class="form-control mb-1" name="tipo" required
+                                    id="tipoModelo4{{modelo4.id}}">
+                                    <option selected disabled value="{{modelo4.tipo}}">
+                                        {% if modelo4.tipo %}
+                                        {{modelo4.tipo}}
+                                        {% else %}
+                                        --------------------
+                                        {% endif %}
+                                    </option>
+                                    <option value="Presentación Oral">Presentación Oral</option>
+                                    <option value="Poster">Poster</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Estudiantes:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="estudiantes"
+                                    id="estudiantesModelo4{{modelo4.id}}" value="{{modelo4.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 "><a target="blank" href="{{modelo4.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="url" name="url"
+                                    id="urlModelo4{{modelo4.id}}" value="{{modelo4.url}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo4{{modelo4.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo4.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo4.anexo.url}}">{{modelo4.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <div class="w-100"></div>
+                    <button onclick="crear_entrada({{numeral.id}}, 'modelo4')" type="button"
+                        id="modelo4Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Fin Numeral 24 Modelo4-->
+
+                <!--Numeral 25 Modelo4-->
+                {% if numeral.orden == 25 %}
+                <div>
+                    {% for modelo4 in numeral_25 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo4/{{modelo4.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Título de la presentación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="titulo"
+                                    id="tituloModelo4{{modelo4.id}}" value="{{modelo4.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Autores:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="autores"
+                                    id="autoresModelo4{{modelo4.id}}" value="{{modelo4.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Nombre conferencia:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="nombre_de_conferencia"
+                                    id="nombre_de_conferenciaModelo4{{modelo4.id}}"
+                                    value="{{modelo4.nombre_de_conferencia}}">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="fecha"
+                                    id="fechaModelo4{{modelo4.id}}" value="{{modelo4.fecha}}">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Tipo de presentación:</label>
+                            <div class="col-md-10">
+                                <select disabled class="form-control mb-1" name="tipo" id="tipoModelo4{{modelo4.id}}">
+                                    <option selected disabled value="{{modelo4.tipo}}">
+                                        {% if modelo4.tipo %}
+                                        {{modelo4.tipo}}
+
+                                        {% else %}
+                                        --------------------
+                                        {% endif %}
+                                    </option>
+                                    <option value="Presentación Oral">Presentación Oral</option>
+                                    <option value="Poster">Poster</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Estudiantes:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="estudiantes"
+                                    id="estudiantesModelo4{{modelo4.id}}" value="{{modelo4.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 "><a target="blank" href="{{modelo4.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="url" name="url"
+                                    id="urlModelo4{{modelo4.id}}" value="{{modelo4.url}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo4{{modelo4.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo4.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo4.anexo.url}}">{{modelo4.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" id="{{modelo4.id}}"
+                                        title="Editar entrada"><i class="fas fa-edit">&nbsp;Editar</i></button>
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <div class="100-w"></div>
+                    <button onclick="crear_entrada({{numeral.id}}, 'modelo4')" type="button"
+                        id="modelo4Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Fin Numeral 25 Modelo4-->
+
+                <!-- Numeral 26 Modelo4-->
+                {% if numeral.orden == 26 %}
+                <div>
+                    {% for modelo4 in numeral_26 %}
+
+                    <form class="pt-4 pr-4 pl-4" id="modelo4/{{modelo4.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Título de la presentación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="titulo"
+                                    id="tituloModelo4{{modelo4.id}}" value="{{modelo4.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Nombre conferencia:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="nombre_de_conferencia"
+                                    id="nombre_de_conferenciaModelo4{{modelo4.id}}"
+                                    value="{{modelo4.nombre_de_conferencia}}">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="fecha"
+                                    id="fechaModelo4{{modelo4.id}}" value="{{modelo4.fecha}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 "><a target="blank" href="{{modelo4.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="url" name="url"
+                                    id="urlModelo4{{modelo4.id}}" value="{{modelo4.url}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo4{{modelo4.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+                        {%if modelo4.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo4.anexo.url}}">{{modelo4.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <div class="w-100"></div>
+                    <button onclick="crear_entrada({{numeral.id}}, 'modelo4')" type="button"
+                        id="modelo4Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Fin Numeral 26  Modelo4-->
+
+                <!-- Numeral 27 Modelo4-->
+                {% if numeral.orden == 27 %}
+                <div>
+                    {% for modelo4 in numeral_27 %}
+                    <form class="pt-4 pr-4 pl-4" id="modelo4/{{modelo4.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Título de la presentación:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="titulo"
+                                    id="tituloModelo4{{modelo4.id}}" value="{{modelo4.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Nombre conferencia:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="nombre_de_conferencia"
+                                    id="nombre_de_conferenciaModelo4{{modelo4.id}}"
+                                    value="{{modelo4.nombre_de_conferencia}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="fecha"
+                                    id="fechaModelo4{{modelo4.id}}" value="{{modelo4.fecha}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 "><a target="blank" href="{{modelo4.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="url" name="url"
+                                    id="urlModelo4{{modelo4.id}}" value="{{modelo4.url}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo4{{modelo4.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+                        {%if modelo4.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo4.anexo.url}}">{{modelo4.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <div class="w-100"></div>
+                    <button onclick="crear_entrada({{numeral.id}}, 'modelo4')" type="button"
+                        id="modelo4Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Fin Numeral 27 Modelo4-->
+
+                <!--Numeral 28 Modelo4-->
+                {% if numeral.orden == 28 %}
+                <div>
+                    {% for modelo4 in numeral_28 %}
+                    <form class="pt-4 pr-4 pl-4" id="modelo4/{{modelo4.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Título:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="titulo"
+                                    id="tituloModelo4{{modelo4.id}}" value="{{modelo4.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Autores:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="autores"
+                                    id="autoresModelo4{{modelo4.id}}" value="{{modelo4.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Nombre conferencia:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="nombre_de_conferencia"
+                                    id="nombre_de_conferenciaModelo4{{modelo4.id}}"
+                                    value="{{modelo4.nombre_de_conferencia}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="fecha"
+                                    id="fechaModelo4{{modelo4.id}}" value="{{modelo4.fecha}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Tipo de presentación:</label>
+                            <div class="col-md-10">
+                                <select disabled class="form-control mb-1" name="tipo" id="tipoModelo4{{modelo4.id}}">
+                                    <option selected disabled value="{{modelo4.tipo}}">
+                                        {% if modelo4.tipo %}
+                                        {{modelo4.tipo}}
+                                        {% else %}
+                                        --------------------
+                                        {% endif %}
+                                    </option>
+                                    <option value="Presentación Oral">Presentación Oral</option>
+                                    <option value="Poster">Poster</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Estudiantes:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="estudiantes"
+                                    id="estudiantesModelo4{{modelo4.id}}" value="{{modelo4.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">DOI/ISBN:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="doi"
+                                    id="doiModelo4{{modelo4.id}}"
+                                    value="{% if modelo4.doi %}{{modelo4.doi}}{% endif %}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 "><a target="blank" href="{{modelo4.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="url" name="url"
+                                    id="urlModelo4{{modelo4.id}}" value="{{modelo4.url}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo4{{modelo4.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo4.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo4.anexo.url}}">{{modelo4.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <div class="w-100"></div>
+                    <button onclick="crear_entrada({{numeral.id}}, 'modelo4')" type="button"
+                        id="modelo4Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Fin Numeral 28 Modelo4-->
+
+                <!--Numeral 29 Modelo4-->
+                {% if numeral.orden == 29 %}
+                <div>
+                    {% for modelo4 in numeral_29 %}
+                    <form class="pt-4 pr-4 pl-4" id="modelo4/{{modelo4.id}}" enctype="multipart/form-data">
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Título:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="titulo"
+                                    id="tituloModelo4{{modelo4.id}}" value="{{modelo4.titulo}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Autores:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="autores"
+                                    id="autoresModelo4{{modelo4.id}}" value="{{modelo4.autores}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Nombre conferencia:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="nombre_de_conferencia"
+                                    id="nombre_de_conferenciaModelo4{{modelo4.id}}"
+                                    value="{{modelo4.nombre_de_conferencia}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Fecha:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="fecha"
+                                    id="fechaModelo4{{modelo4.id}}" value="{{modelo4.fecha}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Tipo de presentación:</label>
+                            <div class="col-md-10">
+                                <select disabled class="form-control mb-1" name="tipo" id="tipoModelo4{{modelo4.id}}">
+                                    <option selected disabled value="{{modelo4.tipo}}">
+                                        {% if modelo4.tipo %}
+                                        {{modelo4.tipo}}
+                                        {% else %}
+                                        --------------------
+                                        {% endif %}
+                                    </option>
+                                    <option value="Presentación Oral">Presentación Oral</option>
+                                    <option value="Poster">Poster</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">Estudiantes:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="estudiantes"
+                                    id="estudiantesModelo4{{modelo4.id}}" value="{{modelo4.estudiantes}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 ">DOI/ISBN:</label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="text" name="doi"
+                                    id="doiModelo4{{modelo4.id}}" value="{{modelo4.doi}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-md-2 "><a target="blank" href="{{modelo4.url}}">URL:</a></label>
+                            <div class="col-md-10">
+                                <input disabled class="form-control mb-1" type="url" name="url"
+                                    id="urlModelo4{{modelo4.id}}" value="{{modelo4.url}}">
+                            </div>
+                        </div>
+
+                        <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                            id="anexoModelo4{{modelo4.id}}">
+                        <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo4.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo4.anexo.url}}">{{modelo4.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                            class="fas fa-save">&nbsp;
+                                            Guardar</i></button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                            class="fas fa-edit">&nbsp;Editar</i></button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                            class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    {% empty %}
+                    <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                        <strong>
+                            <p class="text-center ">Sin entradas</p>
+                        </strong>
+                    </div>
+                    {% endfor %}
+                    <div class="w-100"></div>
+                    <button onclick="crear_entrada({{numeral.id}}, 'modelo4')" type="button"
+                        id="modelo4Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                        Agregar entrada</button>
+                    <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                        class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                </div>
+                {% endif %}
+                <!--Fin Numeral 29 Modelo4-->
+
+                {% if numeral.orden == 30 %}
+                <div>
+                    {% for campo in citas %}
+                    <strong class="mb-4 pl-4">NOTA: para actualizar, favor de dar click en el botón azul
+                        Editar.</strong>
+                    <p class="pl-4">Acceso <a target="_blank" href="https://ui.adsabs.harvard.edu/">ADS</a></p>
+                    <form id="citas/{{campo.id}}" enctype="multipart/form-data">
+                        <div class="pt-4 pl-4">
+                            <div class="form-group">
+
+                                <label for="">Citas totales:</label>
+                                <input disabled class="form-control mb-2" type="number" value="{{campo.citas}}"
+                                    name="citas" id="citas{{campo.id}}">
+
+                                <label for="">Citas obtenidas durante el periodo del reporte</label>
+                                <input disabled class="form-control mb-2" type="number"
+                                    value="{{campo.citas_en_periodo}}" name="citas_en_periodo"
+                                    id="citas_en_periodo{{campo.id}}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="">30a. índice H:</label>
+                                <input disabled class="form-control mb-1" value="{{campo.indiceH}}" type="number"
+                                    name="indiceH" id="indiceH{{campo.id}}">
+                            </div>
+
+                            <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                                id="anexoCitas{{campo.id}}"> 
+                            <small class="mb-4">Tamaño máximo: 5 Mb</small><br>
+                            {%if campo.anexo %}
+                            <strong>Actualmente: </strong><a
+                                href="{{campo.anexo.url}}">{{campo.anexo.name|nombreFile}}</a>
+                            {% endif %}
+
+                            <div class="justify-content-end d-flex">
+                                <button type="button" id="guardarCitas" class="btn btn-success mr-2 actualizar" title="Guardar cambios"><i class="fas fa-save">&nbsp;
+                                        Guardar</i></button>
+
+                                <button id="cancelarCitas" class="btn btn-warning mr-2 text-white editar" type="reset">
+                                    <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+
+                                <button type="button" class="btn btn-primary editar" id="" title="Editar entrada"><i
+                                        class="fas fa-edit">&nbsp;Editar</i></button>
+                            </div>
+                        </div>
+                        <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                            class="text-primary link float-right mt-2">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+                    </form>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+
+    function glosario() {
+        Swal.fire({
+            title: 'Glosario',
+            html: `<table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center" colspan="2">I. INVESTIGACIÓN CIENTIFICA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for glosario in glosario %}
+                            <tr>
+                                <td width=50%><small>{{ glosario.numerales|safe }}</small></td>
+                                <td width=50%><small>{{ glosario.explicacion|safe }}</small></td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>`,
+            width: 880,
+            confirmButtonText: 'Cerrar',
+        });
+    }
+
+</script>

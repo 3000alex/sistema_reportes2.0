@@ -1,0 +1,592 @@
+{% load name %}
+<div class="card" id="numeral">
+    {% for numeral in numeralName %}
+    <div class="card-header">
+        <a href="#" data-toggle="collapse" data-target="#numeral{{numeral.id}}" onclick="icono({{numeral.id}})"
+            class="text-primary">{{numeral}}&nbsp;<i class="fa fa-chevron-down numeral{{numeral.id}}"></i></a>
+        <i onclick="glosario()" style="font-size: 30px; cursor: pointer;" data-toggle="modal"
+            class="far fa-question-circle float-right"></i>
+    </div>
+
+    <div id="numeral{{numeral.id}}" class="collapse" data-parent="#numeral">
+        <div class="card-body" style="font-size: 14px">
+
+            <!--numeral 40 modelo8 -->
+            {% if numeral.orden == 40 %}
+            <div>
+                {% for modelo8 in numeral_40 %}
+                <form id="modelo8/{{modelo8.id}}">
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">Autor(es): </label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="autores"
+                                id="autoresModelo8{{modelo8.id}}" value="{{modelo8.autores}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">URL:</label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="url"
+                                id="urlModelo8{{modelo8.id}}" value="{{modelo8.url}}">
+                        </div>
+                    </div>
+
+                    <label for="">Descripción</label>
+                    <textarea disabled class="form-control mb-1" name="descripcion"
+                        id="descripcionModelo8{{modelo8.id}}" cols="30" rows="5">{{modelo8.descripcion}}</textarea>
+
+                    <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                        id="anexoModelo8{{modelo8.id}}">
+                    <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                    {%if modelo8.anexo %}
+                    <strong>Actualmente: </strong><a href="{{modelo8.anexo.url}}">{{modelo8.anexo.name|nombreFile}}</a>
+                    {% endif %}
+
+                    <div class="justify-content-end d-flex">
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                        class="fas fa-save">&nbsp;
+                                        Guardar</i></button>
+                                <button class="btn btn-warning text-white editar" type="reset">
+                                    <i class="fas fa-ban text-white">&nbsp;Cancelar</i></button>
+                                <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                        class="fas fa-edit">&nbsp;Editar</i></button>
+                                <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                        class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+                <hr>
+                {% empty %}
+                <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                    <strong>
+                        <p class="text-center ">Sin entradas</p>
+                    </strong>
+                </div>
+                <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                    id="infoAnteriorModelo8{{numeral.id}}" onclick="Modelo8.infoAnterior({{numeral.id}})">Importar
+                    periodo
+                    anterior</button>
+                {% endfor %}
+                <div class="w-100"></div>
+                <button onclick="crear_entrada({{numeral.id}} , 'modelo8')" type="button"
+                    id="modelo8Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                    Agregar entrada</button>
+                <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                    class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+            </div>
+            {% endif %}
+            <!--Fin Numeral 40 -->
+
+            <!--numeral 41 modelo8 -->
+            {% if numeral.orden == 41 %}
+            <div>
+                {% for modelo8 in numeral_41 %}
+
+                <form id="modelo8/{{modelo8.id}}">
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">Autor(es): </label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="autores"
+                                id="autoresModelo8{{modelo8.id}}" value="{{modelo8.autores}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">URL:</label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="url"
+                                id="urlModelo8{{modelo8.id}}" value="{{modelo8.url}}">
+                        </div>
+                    </div>
+
+                    <label for="">Descripción</label>
+                    <textarea disabled class="form-control mb-1" name="descripcion"
+                        id="descripcionModelo8{{modelo8.id}}" cols="30" rows="5">{{modelo8.descripcion}}</textarea>
+
+                    <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                        id="anexoModelo8{{modelo8.id}}">
+                    <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                    {%if modelo8.anexo %}
+                    <strong>Actualmente: </strong><a href="{{modelo8.anexo.url}}">{{modelo8.anexo.name|nombreFile}}</a>
+                    {% endif %}
+
+                    <div class="justify-content-end d-flex">
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                        class="fas fa-save">&nbsp;
+                                        Guardar</i></button>
+                                <button class="btn btn-warning text-white editar" type="reset">
+                                    <i class="fas fa-ban text-white">&nbsp;Cancelar</i></button>
+                                <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                        class="fas fa-edit">&nbsp;Editar</i></button>
+                                <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                        class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+                <hr>
+                {% empty %}
+                <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                    <strong>
+                        <p class="text-center ">Sin entradas</p>
+                    </strong>
+                </div>
+                <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                    id="infoAnteriorModelo8{{numeral.id}}" onclick="Modelo8.infoAnterior({{numeral.id}})">Importar
+                    periodo anterior</button>
+
+                {% endfor %}
+                <div class="w-100"></div>
+                <button onclick="crear_entrada({{numeral.id}} , 'modelo8')" type="button"
+                    id="modelo8Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                    Agregar entrada</button>
+                <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                    class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+            </div>
+            {% endif %}
+            <!--Fin Numeral 41 -->
+
+            <!--numeral 42 modelo8 -->
+            {% if numeral.orden == 42 %}
+            <div>
+                {% for modelo8 in numeral_42 %}
+
+                <form id="modelo8/{{modelo8.id}}">
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">Autor(es): </label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="autores"
+                                id="autoresModelo8{{modelo8.id}}" value="{{modelo8.autores}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">URL:</label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="url"
+                                id="urlModelo8{{modelo8.id}}" value="{{modelo8.url}}">
+                        </div>
+                    </div>
+
+                    <label for="">Descripción</label>
+                    <textarea disabled class="form-control mb-1" name="descripcion"
+                        id="descripcionModelo8{{modelo8.id}}" cols="30" rows="5">{{modelo8.descripcion}}</textarea>
+
+                    <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                        id="anexoModelo8{{modelo8.id}}">
+                    <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                    {%if modelo8.anexo %}
+                    <strong>Actualmente: </strong><a href="{{modelo8.anexo.url}}">{{modelo8.anexo.name|nombreFile}}</a>
+                    {% endif %}
+
+                    <div class="justify-content-end d-flex">
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                        class="fas fa-save">&nbsp;
+                                        Guardar</i></button>
+                                <button class="btn btn-warning text-white editar" type="reset">
+                                    <i class="fas fa-ban text-white">&nbsp;Cancelar</i></button>
+                                <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                        class="fas fa-edit">&nbsp;Editar</i></button>
+                                <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                        class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <hr>
+                {% empty %}
+                <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                    <strong>
+                        <p class="text-center ">Sin entradas</p>
+                    </strong>
+                </div>
+
+                <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                    id="infoAnteriorModelo8{{numeral.id}}" onclick="Modelo8.infoAnterior({{numeral.id}})">Importar
+                    periodo anterior</button>
+
+                {% endfor %}
+                <div class="w-100"></div>
+                <button onclick="crear_entrada({{numeral.id}} , 'modelo8')" type="button"
+                    id="modelo8Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                    Agregar entrada</button>
+                <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                    class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+            </div>
+            {% endif %}
+            <!--Fin Numeral 42 -->
+
+            <!--numeral 43 modelo8 -->
+            {% if numeral.orden == 43 %}
+            <div>
+                {% for modelo8 in numeral_43 %}
+
+                <form id="modelo8/{{modelo8.id}}">
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">Autor(es): </label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="autores"
+                                id="autoresModelo8{{modelo8.id}}" value="{{modelo8.autores}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">URL:</label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="url"
+                                id="urlModelo8{{modelo8.id}}" value="{{modelo8.url}}">
+                        </div>
+                    </div>
+
+                    <label for="">Descripción</label>
+                    <textarea disabled class="form-control mb-1" name="descripcion"
+                        id="descripcionModelo8{{modelo8.id}}" cols="30" rows="5">{{modelo8.descripcion}}</textarea>
+
+                    <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                        id="anexoModelo8{{modelo8.id}}">
+                    <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                    {%if modelo8.anexo %}
+                    <strong>Actualmente: </strong><a href="{{modelo8.anexo.url}}">{{modelo8.anexo.name|nombreFile}}</a>
+                    {% endif %}
+
+                    <div class="justify-content-end d-flex">
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                        class="fas fa-save">&nbsp;
+                                        Guardar</i></button>
+                                <button class="btn btn-warning text-white editar" type="reset">
+                                    <i class="fas fa-ban text-white">&nbsp;Cancelar</i></button>
+                                <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                        class="fas fa-edit">&nbsp;Editar</i></button>
+                                <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                        class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+                <hr>
+
+                {% empty %}
+                <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                    <strong>
+                        <p class="text-center ">Sin entradas</p>
+                    </strong>
+                </div>
+
+                <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                    id="infoAnteriorModelo8{{numeral.id}}" onclick="Modelo8.infoAnterior({{numeral.id}})">Importar
+                    periodo anterior</button>
+
+                {% endfor %}
+                <div class="w-100"></div>
+                <button onclick="crear_entrada({{numeral.id}} , 'modelo8')" type="button"
+                    id="modelo8Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                    Agregar entrada</button>
+                <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                    class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+            </div>
+            {% endif %}
+            <!--Fin Numeral 43-->
+
+            <!--numeral 44 modelo8 -->
+            {% if numeral.orden == 44 %}
+            <div>
+                {% for modelo8 in numeral_44 %}
+
+                <form id="modelo8/{{modelo8.id}}">
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">Autor(es): </label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="autores"
+                                id="autoresModelo8{{modelo8.id}}" value="{{modelo8.autores}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">URL: </label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="url"
+                                id="urlModelo8{{modelo8.id}}" value="{{modelo8.url}}">
+                        </div>
+                    </div>
+
+                    <label for="">Descripción</label>
+                    <textarea disabled class="form-control mb-1" name="descripcion"
+                        id="descripcionModelo8{{modelo8.id}}" cols="30" rows="5">{{modelo8.descripcion}}</textarea>
+
+                    <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                        id="anexoModelo8{{modelo8.id}}">
+                    <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                    {%if modelo8.anexo %}
+                    <strong>Actualmente: </strong><a href="{{modelo8.anexo.url}}">{{modelo8.anexo.name|nombreFile}}</a>
+                    {% endif %}
+
+                    <div class="justify-content-end d-flex">
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                        class="fas fa-save">&nbsp;
+                                        Guardar</i></button>
+                                <button class="btn btn-warning text-white editar" type="reset">
+                                    <i class="fas fa-ban text-white">&nbsp;Cancelar</i></button>
+                                <button type="button" class="btn btn-primary editar" title="Editar entrada"><i
+                                        class="fas fa-edit">&nbsp;Editar</i></button>
+                                <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                        class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+                <hr>
+                {% empty %}
+                <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                    <strong>
+                        <p class="text-center ">Sin entradas</p>
+                    </strong>
+                </div>
+
+                <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                    id="infoAnteriorModelo8{{numeral.id}}" onclick="Modelo8.infoAnterior({{numeral.id}})">Importar
+                    periodo
+                    anterior</button>
+
+                {% endfor %}
+                <div class="w-100"></div>
+                <button onclick="crear_entrada({{numeral.id}} , 'modelo8')" type="button"
+                    id="modelo8Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                    Agregar entrada</button>
+                <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                    class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+            </div>
+            {% endif %}
+            <!--Fin Numeral 44-->
+
+            <!-- Numeral 45 Modelo 9-->
+            {% if numeral.orden == 45 %}
+            <div>
+                {% for modelo9 in numeral_45 %}
+
+                <form id="modelo9/{{modelo9.id}}">
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">Nombre: </label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="nombre"
+                                id="nombreModelo9{{modelo9.id}}" value="{{modelo9.nombre}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">Participante(s): </label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="participantes"
+                                id="participantesModelo9{{modelo9.id}}" value="{{modelo9.participantes}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">Financiamiento: </label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="financiamiento"
+                                id="financiamientoModelo9{{modelo9.id}}" value="{{modelo9.financiamiento}}">
+                        </div>
+                    </div>
+
+                    <label for="">Descripción: </label>
+                    <textarea disabled class="form-control mb-1" name="descripcion"
+                        id="descripcionModelo9{{modelo9.id}}" cols="30" rows="5">{{modelo9.descripcion}}</textarea>
+
+
+                    <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                        id="anexoModelo9{{modelo9.id}}">
+                    <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                    {%if modelo9.anexo %}
+                    <strong>Actualmente: </strong><a href="{{modelo9.anexo.url}}">{{modelo9.anexo.name|nombreFile}}</a>
+                    {% endif %}
+
+                    <div class="justify-content-end d-flex">
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-success actualizar  " title="Guardar cambios"><i
+                                        class="fas fa-save">&nbsp;Guardar</i></button>
+                                <button class="btn btn-warning text-white editar" type="reset">
+                                    <i class="fas fa-ban text-white">&nbsp;Cancelar</i></button>
+                                <button type="button" class="btn btn-primary editar  " title="Editar entrada"><i
+                                        class="fas fa-edit">&nbsp;Editar</i></button>
+                                <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                        class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <hr>
+                {% empty %}
+                <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                    <strong>
+                        <p class="text-center ">Sin entradas</p>
+                    </strong>
+                </div>
+
+                <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                    id="infoAnteriorModelo9{{numeral.id}}" onclick="Modelo9.infoAnterior({{numeral.id}})">Importar
+                    periodo
+                    anterior</button>
+
+                {% endfor %}
+                <div class="w-100"></div>
+                <button onclick="crear_entrada({{numeral.id}} , 'modelo9')" type="button"
+                    id="modelo9Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                    Agregar entrada</button>
+                <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                    class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+            </div>
+            {% endif %}
+            <!--Fin Numeral 45-->
+
+            <!--Numeral 46 Modelo10-->
+            {% if numeral.orden == 46 %}
+            <div>
+                {% for modelo10 in numeral_46 %}
+
+                <form id="modelo10/{{modelo10.id}}">
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">Título: </label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="titulo"
+                                id="tituloModelo10{{modelo10.id}}" value="{{modelo10.titulo}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">Autor(es): </label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="autores"
+                                id="autoresModelo10{{modelo10.id}}" value="{{modelo10.autores}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">No. Reporte/ID: </label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="numero_reportes"
+                                id="NreporteModelo10{{modelo10.id}}" value="{{modelo10.numero_reportes}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">Fecha: </label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="fecha"
+                                id="fechaModelo10{{modelo10.id}}" value="{{modelo10.fecha}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-sm-2">URL: </label>
+                        <div class="col-sm-10">
+                            <input disabled class="form-control mb-1" type="text" name="url"
+                                id="urlModelo10{{modelo10.id}}" value="{{modelo10.url}}">
+                        </div>
+                    </div>
+
+                    <input disabled class="form-control" type="file" accept=".pdf, image/*" name="anexo"
+                        id="anexoModelo10{{modelo10.id}}">
+                    <small class="mb-4">Tamaño máximo: 5 Mb</small>
+
+                    {%if modelo10.anexo %}
+                    <strong>Actualmente: </strong><a
+                        href="{{modelo10.anexo.url}}">{{modelo10.anexo.name|nombreFile}}</a>
+                    {% endif %}
+
+                    <div class="justify-content-end d-flex">
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-success actualizar" title="Guardar cambios"><i
+                                        class="fas fa-save">&nbsp;Guardar</i></button>
+                                <button class="btn btn-warning text-white editar" type="reset">
+                                    <i class="fas fa-ban text-white"></i>&nbsp;Cancelar</i></button>
+                                <button type="button" class="btn btn-primary editar" id="{{modelo10.id}}"
+                                    title="Editar entrada"><i class="fas fa-edit">&nbsp;Editar</i></button>
+                                <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada"><i
+                                        class="fas fa-trash-alt">&nbsp;Eliminar</i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+                <hr>
+                {% empty %}
+                <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                    <strong><p class="text-center ">Sin entradas</p></strong>
+                </div>
+                {% endfor %}
+                <button onclick="crear_entrada({{numeral.id}} , 'modelo10')" type="button" id="modelo10Crear{{numeral.id}}"
+                    class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                    Agregar entrada</button>
+                <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                    class="text-primary link float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+            </div>
+            {% endif %}
+            <!--numeral 46 Modelo10 -->
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% block JsCode %}
+
+<script>
+
+    function glosario() {
+        Swal.fire({
+            title: 'Glosario',
+            html: `<table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center" colspan="2">III. DESARROLLO TECNOLÓGICO E INNOVACIÓN(agregar
+                                    patentes en REGISTRO)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for glosario in glosario %}
+                            <tr>
+                                <td width=50%><small>{{ glosario.numerales|safe }}</small></td>
+                                <td width=50%><small>{{ glosario.explicacion|safe }}</small></td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>`,
+            width: 880,
+            confirmButtonText: 'Cerrar',
+        });
+    }
+
+
+</script>
+{% endblock %}

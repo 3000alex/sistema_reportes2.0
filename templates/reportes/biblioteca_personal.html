@@ -1,0 +1,355 @@
+{% extends 'core/base.html' %}
+<!--Encabezado - nav - title name-->
+{% load static %}
+{% block head %}
+
+{% endblock %}
+{% block contenido %}
+
+<div class="container-fluid mb-4" style="margin-top: 120px;">
+
+    <div class="row justify-content-beetween mb-2">
+        <div class="col-12">
+            <a class="float-right btn btn-light text-primary"
+                href="https://www.scimagojr.com/journalrank.php?category=3103" target="blank">Consultar cuartiles</a>
+        </div>
+    </div>
+
+    {% for message in messages %}
+    <div class="alert alert-info alert-dismissible fade show text-center" role="alert">
+        {{message|safe}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    {% csrf_token %}
+    <table id="biblioteca-personal" class="table table-bordered table-striped text-center dt-responsive"
+        style="width:100%;">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Link ADS</th>
+                <th>Título</th>
+                <th>Autores</th>
+                <th>Enlaces</th>
+                <th>Numeral</th>
+                <th>Estudiante(s)</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody></tbody>
+    </table>
+
+</div>
+{% endblock %}
+
+{% block JSCode %}
+<!--Data table -->
+<script src="{% static 'DataTables/datatables.min.js'%}"></script>
+<link rel="stylesheet" href="{% static 'DataTables/datatables.min.css'%}">
+<script>
+    var tabla;
+    $(document).ready(function () {
+        tabla = $('#biblioteca-personal').DataTable({
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ entradas",
+                "zeroRecords": "Su biblioteca esta vacia",
+                "info": "<small>Mostrando entradas del _START_ al _END_ de un total de _TOTAL_ registros</small>",
+                "infoEmpty": "Sin resultados",
+                "infoFiltered": "(filtrado de un total de _MAX_ entradas",
+                "sSearch": "Buscar:",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Ultimo",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior",
+                },
+                "sProcessing": "Procesando..."
+            },
+            dom: 'lifBtp',
+            "pageLength": 20,
+            "lengthMenu": [[5, 10, 20, 25, 50, -1], [5, 10, 20, 25, 50, "Todos"]],
+            "order": [[0, "desc"]],
+            responsive: true,
+            "ajax": {
+                "url": 'http://127.0.0.1:8000/API/modelo1',
+                "dataSrc": "",
+                "data":{
+                    'id_usuario': "{{user.id}}",
+                    'biblioteca':true
+                }
+            },
+            columnDefs: [{
+                width: "10px",
+                targets: 0
+            },
+            {
+                width: "5px",
+                targets: 1
+            },
+            {
+                width: "70px",
+                targets: 2
+            },
+            {
+                width: "70px",
+                targets: 3
+            },
+            {
+                width: "10px",
+                targets: 4
+            },
+            {
+                width: "70px",
+                targets: 5
+            },
+            {
+                width: "70px",
+                targets: 6
+            },
+            {
+                width: "70px",
+                targets: 7
+            }
+            ],
+            "columns": [
+                { "data": "fecha" },
+                {
+                    sortable: false,
+                    "render": function (data, type, full, meta) {
+                        return `<a href="${full.url}" target="_blank" >${full.bibcode}</a>`
+                    }
+                },
+                {
+                    sortable: false,
+                    "render": function (data, type, full, meta) {
+                        var autores = full.titulo.substring(0, 150)
+                        return autores;
+                    }
+                },
+                {
+                    sortable: false,
+                    "render": function (data, type, full, meta) {
+                        var autores = full.autores.substring(0, 150)
+                        return autores;
+                    }
+                },
+                {
+                    sortable: false,
+                    "render": function (data, type, full, meta) {
+                        return `<div class="dropdown">
+                        <a class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"> <i style="font-size:25px; color:black;"
+                                class="fas fa-file-alt"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a target="blank" class="dropdown-item"
+                                href="https://ui.adsabs.harvard.edu/link_gateway/${full.bibcode}/PUB_HTML/">Publisher
+                                HTML</a>
+                            <a target="blank" class="dropdown-item"
+                                href="https://ui.adsabs.harvard.edu/link_gateway/${full.bibcode}/PUB_PDF/">Publisher
+                                PDF</a>
+                            <a target="blank" class="dropdown-item"
+                                href="https://ui.adsabs.harvard.edu/link_gateway/${full.bibcode}/EPRINT_HTML/">arXiv
+                                HTML</a>
+                            <a target="blank" class="dropdown-item"
+                                href="https://ui.adsabs.harvard.edu/link_gateway/${full.bibcode}/EPRINT_PDF/">arXiv
+                                PDF</a>
+                        </div>`;
+                    }
+                },
+                {
+                    sortable: false,
+                    "render": function (data, type, full, meta) {
+                        if (full.numeral)
+                            return full.numeral.nombre
+                        else
+                            return 'No aplica'
+                    }
+                },
+                {
+                    sortable: false,
+                    "render": function (data, type, full, meta) {
+                        if (full.estudiantes)
+                            return full.estudiantes;
+                        else
+                            return "No aplica"
+
+                    }
+                },
+                {
+                    sortable: false,
+                    "render": function (data, type, full, meta) {
+                        return `<button id="editar${full.id}" class="btn btn-success btn_editar mx-auto"><i class="fas fa-user-edit"></i></button>
+                                <button id="eliminar${full.id}" class="btn btn-danger btn_eliminar mx-auto"><i class="fas fa-user-times"></i></button>`
+                    }
+                }
+
+
+
+            ]
+
+        }); //Fin Biblioteca personal Data Table
+    });
+
+
+    $(document).on('click', '.btn_editar', function () {
+        var id = $(this).attr('id').slice(6, $(this).attr('id').length);
+
+        Swal.fire({
+            title: 'Editar entrada',
+            html: `
+                <form id="actualizarBibliotecaForm">
+                    <input class="form-control" id="${id}" type="hidden" name="id" />
+
+                    <p style="margin-top:10px; text-align: left; !important">Añadir a numeral: </p>
+                    <select class="form-control mb-2" name="numeral" id="formNumeral">
+                        <option disabled selected id="opcion_select"  value=""></option>
+                        <option value=1>1. Artículos científicos arbitrados en revistas periódicas indizadas en el
+                            primer cuartil.</option>
+                        <option value=2>2. Artículos científicos arbitrados en revistas periódicas indizadas en segundo
+                            o tercer cuartil.</option>
+                        <option value=3>3. Artículos científicos arbitrados en revistas periódicas indizadas en cuarto
+                            cuartil.</option>
+                        <option value=4>4. Artículos científicos arbitrados en revistas del Índice CONACYT.</option>
+                        <option value=5>5. Artículos científicos arbitrados en revistas periódicas emergentes.</option>
+                        <option value=7>7. Artículos aceptados con arbitraje internacional en revistas periódicas
+                            indizadas.</option>
+                        <option value=9>9. Artículos enviados con arbitraje en revistas periódicas no indizadas.
+                        </option>
+                        <option value=11>11. Artículos científicos arbitrados en extenso en memorias de congresos
+                            internacionales.</option>
+                        <option value=12>12. Artículos científicos arbitrados en extenso en memorias de congresos
+                            nacionales.</option>
+                        <option value=13>13. Artículos científicos no arbitrados en extenso en memorias de congresos
+                            internacionales.</option>
+                        <option value=14>14. Artículos científicos no arbitrados en extenso en memorias de congresos
+                            nacionales.</option>
+                        <option value="15">14a. Reportes científicos no arbitrados en publicaciones periódicas.</option>
+                        <option value="">No aplica</option>
+                    </select>
+
+                    <p  style="margin-top:20px; text-align:left; !important">Estudiante(s):</p>
+                    <input class="form-control mb-2" value="" placeholder="Apellido, Nombre" id="form-estudiantes" type="text" name="estudiantes" />
+		</form>
+                `,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '<i class="far fa-save"></i> Guardar',
+            cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+            didOpen: (object) => {
+                $.ajax({
+                    type: "GET",
+                    url: `http://127.0.0.1:8000/API/modelo1/${id}/`,
+                    headers: { 'X-CSRFToken': token("csrftoken") },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.numeral) {
+                            $("#opcion_select").val(response.numeral.id);
+                            $("#opcion_select").text(response.numeral.nombre);
+                        }
+                        else {
+                            $("#opcion_select").val("");
+                            $("#opcion_select").text("No aplica");
+                        }
+
+                        $("#form-estudiantes").val(response.estudiantes);
+                    }
+                });
+            }
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: "PATCH",
+                    url: `http://127.0.0.1:8000/API/modelo1/${id}/`,
+                    headers: { 'X-CSRFToken': token("csrftoken") },
+                    data: {
+                        "numeral_id": $("select[name='numeral'] option:selected").val(),
+                        "estudiantes": $("#form-estudiantes").val()
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Actualizado',
+                            text: 'El item fue actualizado con exito',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                            timer: 2000
+                        });
+                        tabla.ajax.reload(null, false);
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+
+                });
+            }
+        });
+    });
+
+    $(document).on('click', '.btn_eliminar', function () {
+
+        var id = $(this).attr('id').slice(8, $(this).attr('id').length);
+
+        Swal.fire({
+            title: 'Eliminar entrada',
+            text: "¿Desea eliminar este Item de su biblioteca?",
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            confirmButtonText: '<i class="fas fa-check"></i> Aceptar',
+            cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: "DELETE",
+                    headers: { 'X-CSRFToken': token("csrftoken") },
+                    url: `http://127.0.0.1:8000/API/modelo1/${id}/`,
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Eliminado',
+                            text: 'El item fue elimanado con exito',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                            timer: 2000
+                        });
+                        tabla.ajax.reload(null, false);
+                    },
+                    error: function (err) {
+                        Swal.fire({
+                            title: 'Error en la solicitud',
+                            text: 'Algo salio mal ' + err.statusText,
+                            icon: 'error',
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+
+    function token(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+</script>
+
+<!--Fin update - Delete *articles* -->
+{% endblock %}

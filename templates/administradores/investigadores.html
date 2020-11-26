@@ -1,0 +1,475 @@
+{% extends 'core/base.html' %}
+
+{% block contenido %}
+{% load static %}
+
+<div class="container" style="margin-top: 150px;">
+    {% csrf_token %}
+    <div class="float-right">
+        <button onclick="crearUsuario()" class="btn btn-primary"><i class="fas fa-user-plus"
+                title="Agregar investigador"></i>&nbspAgregar</button>
+    </div>
+
+    <table id="usuarios" class="table table-bordered table-striped text-center" style="width:100%">
+        <thead>
+            <tr>
+                <th scope="col">Usuario</th>
+                <th scope="col">Apellido(s)</th>
+                <th scope="col">Nombre(s)</th>
+                <th scope="col">Nombre corto</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody></tbody>
+    </table>
+</div>
+{% endblock %}
+
+<!--JS Code-->
+{% block JSCode %}
+<!--Data table -->
+<script src="{% static 'DataTables/datatables.min.js'%}"></script>
+<link rel="stylesheet" href="{% static 'DataTables/datatables.min.css'%}">
+<script>
+
+    var tabla = $('#usuarios').DataTable({
+        "language": {
+            "lengthMenu": "Mostrar _MENU_ usuarios",
+            "zeroRecords": "No se encontraron resultados",
+            "info": "<small>Mostrando usuarios del _START_ al _END_ de un total de _TOTAL_ registros</small>",
+            "infoEmpty": "No existen usuarios",
+            "infoFiltered": "(filtrado de un total de _MAX_ usuarios",
+            "sSearch": "Buscar:",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Ultimo",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior",
+            },
+            "sProcessing": "Procesando..."
+        },
+        dom: 'lifBtp',
+        "pageLength": 50,
+        "lengthMenu": [[5, 10, 20, 25, 50, -1], [5, 10, 20, 25, 50, "Todos"]],
+        "order": [[1, "asc"]],
+        responsive: true,
+        "ajax": {
+            "url": 'http://127.0.0.1:8000/API/investigadores',
+            "dataSrc": "",
+            "data": {
+                'id_usuario': "{{user.id}}"
+            }
+        },
+        "columns": [
+            { "data": "email" },
+            { "data": "apellido" },
+            { "data": "nombre" },
+            { "data": "nombreCorto" },
+            {
+                sortable: false,
+                "render": function (data, type, full, meta) {
+
+                    return `<button class="btn btn-success" onClick="editUser(${full.id})" title="Editar perfil"><i
+                            class="fas fa-user-edit"></i></button>
+
+                    <button class="btn btn-danger" onClick="eliminarUsuario(${full.id})"><i
+                            class="fas fa-user-times" title="Eliminar perfil"></i></button>
+
+                    <button class="btn btn-secondary" title="Mensaje de bienvenida"
+                        onClick="mensajeBienvenida( '${full.id}', '${full.nombre}', '${full.apellido}' )"><i
+                            class="fas fa-envelope"></i></button>`
+                }
+            },
+
+        ]
+
+    }); //Fin de Usuarios  Datatable
+
+    // Delete Item 
+    function eliminarUsuario(id) {
+        Swal.fire({
+            title: 'Eliminar Investigador',
+            text: "¿Realmente desea eliminar este perfil?",
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            confirmButtonText: '<i class="fas fa-check"></i> Aceptar',
+            cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+
+        }).then((result) => {
+            if (result.value) {
+
+                $.ajax({
+                    type: "DELETE",
+                    headers: { 'X-CSRFToken': token("csrftoken") },
+                    url: `http://127.0.0.1:8000/API/investigadores/${id}/`,
+                    dataType: 'json',
+                })
+                    .done(function (response) {
+
+                        tabla.ajax.reload(null, false)
+                        Swal.fire({
+                            title: 'Eliminado',
+                            text: 'Perfil eliminado exitosamente',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                            timer: 2000
+                        });
+                    })
+                    .fail(function (response) {
+                        Swal.fire({
+                            title: 'Error en la solicitud',
+                            text: 'Algo salio mal [Code: ' + response.statusText + " ]",
+                            icon: 'error',
+                        });
+                    });
+            }
+        });
+    }
+
+    // Create Item
+    function crearUsuario() {
+        Swal.fire({
+            title: 'Agregar Investigador',
+            html: `<form id="addUser">
+                    {% csrf_token %}
+                        <input class="form-control" id="form-id" type="hidden" name="formId" />
+
+                        <p style="margin-top:10px; font-size:16px; text-align: left; !important">Usuario:</p>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-at"></i></span>
+                            </div>
+                            <input type="email" name="email" placeholder="Usuario" class="form-control"
+                                aria-label="Username" aria-describedby="basic-addon1" required>
+                        </div>
+                        <small class="form-text text-muted mb-3">El usuario debe ser el correo electrónico institucional
+                            del investigador.</small>
+
+                        <p style="margin-top:10px; font-size:16px; text-align: left; !important">Apellido(s):</p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-edit"></i></span>
+                            </div>
+                            <input type="text" name="lastName" placeholder="Apellido(s)" class="form-control"
+                                aria-label="Username" aria-describedby="basic-addon1" required>
+                        </div>
+
+                        <p style="margin-top:10px; font-size:16px; text-align: left; !important">Nombre(s):</p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-edit"></i></span>
+                            </div>
+                            <input type="text" name="name" placeholder="Nombre(s)" class="form-control"
+                                aria-label="Username" aria-describedby="basic-addon1" required>
+                        </div>
+
+                        <p style="margin-top:10px; font-size:16px; text-align: left; !important">Nombre corto:</p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" name="nombreCorto" class="form-control" aria-label="Username"
+                                data-toggle="popover" title="Acerca de" aria-describedby="basic-addon1"
+                                placeholder="Nombre corto" required>
+                        </div>
+                    </form>`,
+            showCancelButton: true,
+            didOpen: (toast) => {
+                $('[data-toggle="popover"]').popover({
+                    trigger: 'hover',
+                    html: true,
+                    content: `<small class="form-text text-muted mb-3">
+                        <p>Cómo será identificado el investigador en el Reporte Maestro. <br>
+                            Formato sugerido: Apellido(s), N. <br>
+                            Ejemplo: López-Hernández, M.<br>
+                        NOTA: El texto antes de la coma se usará para identificar en negrita
+                            al investigador en el Reporte Maestro</p> 
+                        </small>`
+                })
+            },
+            cancelButtonColor: '#d33',
+            confirmButtonText: '<i class="fas fa-check"></i> Crear',
+            cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+            preConfirm: () => {
+                var email = $('input[name="email"]').val().trim();
+                var nombre = $('input[name="name"]').val().trim();
+                var apellidos = $('input[name="lastName"]').val().trim();
+                var nombreCorto = $('input[name="nombreCorto"]').val().trim();
+
+                if (email && nombre && apellidos && nombreCorto) {
+                    // Create Ajax Call
+                    agregarUsuario(email, nombre, apellidos, nombreCorto)
+                }
+                else {
+                    alert("Todos los campos son obligatorios")
+                    return false;
+                }
+            }
+        });
+    }
+
+    function agregarUsuario(email, nombre, apellidos, nombreCorto) {
+        $.ajax({
+            type: 'POST',
+            url: `http://127.0.0.1:8000/API/investigadores/`,
+            headers: { 'X-CSRFToken': token("csrftoken") },
+            data: {
+                'email': email,
+                'nombre': nombre,
+                'apellido': apellidos,
+                'nombreCorto': nombreCorto,
+            },
+            dataType: 'JSON',
+            beforeSend: function (response) {
+                Swal.fire({
+                    title: 'Procesando',
+                    html: 'Espere unos segundos ..',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    timerProgressBar: true,
+                    willOpen: () => {
+                        Swal.showLoading()
+                    },
+                })
+            }
+        })
+            .done(function (response) {
+                if (response) {
+                    tabla.ajax.reload(null, false);
+                    Swal.fire({
+                        title: 'Operación exitosa',
+                        text: 'Perfil creado correctamente',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timerProgressBar: true,
+                        timer: 2000
+                    });
+                }
+            })
+            .fail(function (response) {
+                Swal.fire({
+                    title: 'Error en la solicitud',
+                    text: 'Algo salio mal [Code: ' + response.statusText + " ]",
+                    icon: 'error',
+                });
+            });
+
+
+
+
+
+    }
+
+    // Modal Update
+    function editUser(id) {
+        Swal.fire({
+            title: 'Editar usuario',
+            html: `<form id="updateUser" action="">
+                        <input class="form-control" id="form-id" type="hidden" name="formId" />
+
+                        <p style="margin-top:10px; font-size:16px; text-align: left; !important">Usuario:</p>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-at"></i></span>
+                            </div>
+                            <input id="form-Email" type="email" name="formEmail" class="form-control"
+                                aria-label="Username" aria-describedby="basic-addon1" required>
+                        </div>
+                        <small class="form-text text-muted mb-3">El usuario debe ser el correo electrónico institucional
+                            del investigador.</small>
+
+                        <p style="margin-top:10px; font-size:16px; text-align: left; !important">Apellido(s):</p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-edit"></i></span>
+                            </div>
+                            <input id="form-LastName" type="text" name="formLastName" class="form-control"
+                                aria-label="Username" aria-describedby="basic-addon1" required>
+                        </div>
+
+                        <p style="margin-top:10px; font-size:16px; text-align: left; !important">Nombre(s):</p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-edit"></i></span>
+                            </div>
+                            <input id="form-Name" type="text" name="formName" class="form-control" aria-label="Username"
+                                aria-describedby="basic-addon1" required>
+                        </div>
+
+                        <p style="margin-top:10px; font-size:16px; text-align: left; !important">Nombre corto:</p>
+                        <div class="input-group ">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
+                            </div>
+
+                            <input id="form-NombreCorto" type="text" name="formNombreCorto" class="form-control"
+                                data-toggle="popover" title="Acerca de" aria-label="Username"
+                                aria-describedby="basic-addon1" placeholder="Nombre corto">
+                        </div>
+                </form>`,
+            showCancelButton: true,
+            didOpen: (object) => {
+                $.ajax({
+                    type: "GET",
+                    url: `http://127.0.0.1:8000/API/investigadores/${id}`,
+                    headers: { 'X-CSRFToken': token("csrftoken") },
+                    dataType: "json",
+                    success: function (response) {
+                        $("input[name='formId']").val(response.id);
+                        $("input[name='formEmail']").val(response.email);
+                        $("input[name='formLastName']").val(response.apellido);
+                        $("input[name='formName']").val(response.nombre);
+                        $("input[name='formNombreCorto']").val(response.nombreCorto);
+
+                    }
+                });
+                $('[data-toggle="popover"]').popover({
+                    trigger: 'hover',
+                    html: true,
+                    content: `<small class="form-text text-muted mb-3">
+                        <p>Cómo será identificado el investigador en el Reporte Maestro. <br>
+                            Formato sugerido: Apellido(s), N. <br>
+                            Ejemplo: López-Hernández, M.<br>
+                        NOTA: El texto antes de la coma se usará para identificar en negrita
+                            al investigador en el Reporte Maestro</p> 
+                        </small>`
+                })
+            },
+            cancelButtonColor: '#d33',
+            confirmButtonText: '<i class="far fa-save"></i> Guardar',
+            cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+
+        }).then((result) => {
+            if (result.value) {
+                actualizarUsuario();
+            }
+        }).catch((err) => {
+
+        });
+    }
+
+    function actualizarUsuario() {
+        var idInput = $('input[name="formId"]').val().trim(); //Id Input
+        var nombre = $('input[name="formName"]').val().trim(); //Nombre
+        var apellidos = $('input[name="formLastName"]').val().trim(); //Apellidos
+        var email = $('input[name="formEmail"]').val().trim(); //correo - Usuario
+        var nombreCorto = $('input[name="formNombreCorto"]').val().trim(); //correo - Usuario
+        if (nombre && apellidos && email) { //Comprobamos si existe un valor en variables
+            // Create Ajax Call
+            $.ajax({
+                type: "PATCH",
+                url: `http://127.0.0.1:8000/API/investigadores/${idInput}/`,
+                headers: { 'X-CSRFToken': token("csrftoken") },
+                data: {
+                    'nombre': nombre,
+                    'apellido': apellidos,
+                    'email': email,
+                    'nombreCorto': nombreCorto
+                },
+                dataType: 'json',
+            })
+                .done(function (response) {
+                    if (response) {
+                        tabla.ajax.reload(null, false)
+                        Swal.fire({
+                            title: 'Actualizado',
+                            text: 'Usuario actualizado exitosamente',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                            timer: 2000
+                        });
+                    }
+                })
+                .fail(function (response) {
+                    Swal.fire({
+                        title: 'Error en la solicitud',
+                        text: 'Algo salio mal [Code: ' + response.statusText + " ]",
+                        icon: 'error',
+                    });
+                });
+        }
+
+    }
+
+    //Mensaje de bienvenida
+    function mensajeBienvenida(id, nombre, apellidos) {
+
+        Swal.fire({
+            title: 'Reenvio de mensaje',
+            html: `¿Desea enviar nuevamente el mensaje de bienvenida a ${nombre} ${apellidos} ? <br> NOTA: Se restablecerá su contraseña.`,
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            confirmButtonText: '<i class="fas fa-check"></i> Aceptar',
+            cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+
+        }).then((result) => {
+            if (result.value) {
+                var csrfmiddlewaretoken = $('input[name="csrfmiddlewaretoken"]').val().trim();
+
+                $.ajax({
+                    url: '{% url "administradores:correoBienvenida" %}',
+                    type: 'POST',
+                    data: {
+                        'id': id,
+                        'nombre': nombre,
+                        'apellidos': apellidos,
+                        'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                    },
+                    dataType: 'json',
+                    beforeSend: function (response) {
+                        Swal.fire({
+                            title: 'Procesando',
+                            html: 'Espere unos segundos ..',
+                            icon: 'info',
+                            allowOutsideClick: false,
+                            timerProgressBar: true,
+                            willOpen: () => {
+                                Swal.showLoading()
+                            },
+                        })
+                    }
+                })
+                    .done(function (response) {
+                        Swal.fire({
+                            title: 'Mensaje enviado',
+                            text: 'se envio exitosamente el mensaje de bienvenida',
+                            icon: 'success',
+                        })
+                    })
+                    .fail(function (response) {
+                        Swal.fire({
+                            title: 'Error en la solicitud',
+                            text: 'Algo salio mal [Code: ' + response.statusText + " ]",
+                            icon: 'error',
+                        });
+                    });
+            }
+        }).catch((err) => {
+
+        });
+
+    }
+
+    function token(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+</script>
+{% endblock %}

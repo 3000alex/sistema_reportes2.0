@@ -1,0 +1,220 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block head %}
+<style>
+    #enviar {
+        display: block;
+        color: white;
+        cursor: pointer;
+        position: fixed;
+        right: 12px;
+        top: 100px;
+        z-index: 999;
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+
+<div class="container-fluid mb-4" style="margin-top: 120px;">
+    <form id="formid">
+        {% csrf_token %}
+
+        <button type="button" id="enviar" class="btn btn-success"><i class="fas fa-book"></i>&nbsp;&nbsp;Agregar a
+            biblioteca</button>
+
+        <table id="publicaciones" class="table table-bordered table-striped text-center dt-responsive" width=100%>
+            <thead>
+                <tr>
+                    <th>Agregar</th>
+                    <th>OK</th>
+                    <th>Fecha</th>
+                    <th>Link ADS</th>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Enlaces</th>
+                    <th class="d-none">Doi</th>
+                    <th class="d-none">Page</th>
+                    <th class="d-none">Volume</th>
+                    <th class="d-none">Pub</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for datos in data %}
+                <tr>
+
+                    <td>
+                        <input {%for article in articulos%}
+                            {% if  article.bibcode == datos.bibcode %}disabled{%endif%}{% endfor %}
+                            style="transform: scale(1.5);" class="center sesion" type="checkbox" name="seleccion[]"
+                            id="{{forloop.counter}}" value="">
+                    </td>
+                    <!--Checkbox-->
+
+                    <td>
+                        {%for article in articulos%}
+                        {% if  article.bibcode == datos.bibcode %}
+                        <i style="color:green;" class="fas fa-check-circle">
+                            {%endif%}
+                            {% endfor %}
+                    </td>
+                    <!--Ok-->
+
+                    <td id="fecha{{forloop.counter}}">{{datos.pubdate|slice:":7"}}</td>
+
+                    <td id="bibcode{{forloop.counter}}"><a target="blank"
+                            href="https://ui.adsabs.harvard.edu/abs/{{datos.bibcode}}/abstract">{{datos.bibcode}}</a>
+                    </td>
+
+                    <td id="titulo{{forloop.counter}}">
+                        <div style="width:400px;">{% for title in datos.title %}{{title}}{% endfor %}</div>
+                    </td>
+
+                    <td id="autor{{forloop.counter}}">
+                        <div style="height:70px; overflow: hidden;">
+                            {% for author in datos.author %}{% if forloop.last %} {{author}} {% else %} {{author}};
+                            {% endif %} {% endfor %}</div>
+                    </td>
+
+                    <td>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"> <i style="font-size:25px; color:black;"
+                                    class="fas fa-file-alt"></i></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a target="blank" class="dropdown-item"
+                                    href="https://ui.adsabs.harvard.edu/link_gateway/{{datos.bibcode}}/PUB_HTML/">Publisher
+                                    HTML</a>
+                                <a target="blank" class="dropdown-item"
+                                    href="https://ui.adsabs.harvard.edu/link_gateway/{{datos.bibcode}}/PUB_PDF/">Publisher
+                                    PDF</a>
+                                <a target="blank" class="dropdown-item"
+                                    href="https://ui.adsabs.harvard.edu/link_gateway/{{datos.bibcode}}/EPRINT_HTML/">arXiv
+                                    HTML</a>
+                                <a target="blank" class="dropdown-item"
+                                    href="https://ui.adsabs.harvard.edu/link_gateway/{{datos.bibcode}}/EPRINT_PDF/">arXiv
+                                    PDF</a>
+                            </div>
+                        </div>
+                    </td>
+                    <!--Enlaces-->
+                    <td class="d-none" id="doi{{forloop.counter}}">
+                        {%for d in datos.doi %}{% if d %}{{d}}{% endif %}{% endfor %}</td>
+                    <td class="d-none" id="page{{forloop.counter}}">
+                        {% for d in datos.page %}{% if d %}{{d}}{% endif %}{% endfor %}</td>
+                    <td class="d-none" id="volume{{forloop.counter}}">{% if datos.volume %} {{datos.volume}}{% endif %}
+                    </td>
+                    <td class="d-none" id="pub{{forloop.counter}}"> {% if datos.pub %}{{datos.pub}}{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+</div>
+{% endblock %}
+
+{% block JSCode %}
+<!--Data tables-->
+<script src="{% static 'DataTables/datatables.min.js'%}"></script>
+<link rel="stylesheet" href="{% static 'DataTables/datatables.min.css'%}">
+<script>
+    $('#publicaciones').DataTable({
+        "language": {
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "zeroRecords": "No se encontraron resultados",
+            "info": "<small>Mostrando entradas del _START_ al _END_ de un total de _TOTAL_ entradas</small>",
+            "infoEmpty": "Sin resultados",
+            "infoFiltered": "(filtrado de un total de _MAX_ entradas)",
+            "sSearch": "Buscar:",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Ultimo",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior",
+            },
+            "sProcessing": "Procesando..."
+        },
+        dom: 'li<"toolbar">fBtp',
+        "pageLength": 50,
+        "lengthMenu": [[5, 10, 20, 25, 50, -1], [5, 10, 20, 25, 50, "Todos"]],
+        "order": [[2, "desc"]],
+        responsive: true
+    });
+    $("div.toolbar").html('<small>Favor de seleccionar los artículos para agregar a su biblioteca</small>');
+</script>
+<!--End data tables -->
+<script>
+
+    document.getElementById('enviar').addEventListener('click', function () {
+
+        var articulosObj = []
+        $("input:checkbox:checked").each(function () {
+            id = this.id;
+
+            articulosObj.push({
+                "fecha": document.getElementById("fecha" + id).innerText.replace('-', '/').trim(),
+                "bibcode": document.getElementById("bibcode" + id).innerText.trim(),
+                "titulo": document.getElementById("titulo" + id).innerText.trim(),
+                "autores": document.getElementById("autor" + id).innerText.trim(),
+                "doi": document.getElementById("doi" + id).innerText.trim(),
+                "page": document.getElementById("page" + id).innerText.trim(),
+                "volume": document.getElementById("volume" + id).innerText.trim(),
+                "pub": document.getElementById("pub" + id).innerText.trim(),
+            });
+        });
+
+        Swal.fire({
+            title: 'Obteniendo Metadatos ADS',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            text: 'Espere un momento, por favor',
+            willOpen: () => {
+                Swal.showLoading()
+            },
+        });
+
+        articulosObj = JSON.stringify(articulosObj);
+        var data = new FormData()
+        data.append('csrfmiddlewaretoken',token('csrftoken'))
+        data.append('articulos',articulosObj)
+
+        fetch("{% url 'reportes:agregar-biblioteca' %}", {
+            method: "POST",
+            body: data,
+        })
+            .then(response => {
+                $(location).attr('href',"{% url 'reportes:biblioteca_personal' %}");
+                console.log(response);
+
+                return false;
+            })
+            .catch(err => {
+                console.log(err);
+                return false;
+
+            });
+
+    });
+
+    function token(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+</script>
+
+{% endblock %}

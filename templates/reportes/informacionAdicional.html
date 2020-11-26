@@ -1,0 +1,136 @@
+{% load name %}
+{% load static %}
+<div class="card" id="numeral">
+    {% for numeral in numeralName %}
+    <div class="card-header">
+        <span onclick="icono({{numeral.id}})" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+            class="text-primary" style="cursor: pointer;">{{numeral}}&nbsp;<i
+                class="fa fa-chevron-down numeral{{numeral.id}}"></i></span>
+        <i onclick="glosario()" style="font-size: 30px; cursor: pointer;" data-toggle="modal"
+            class="far fa-question-circle float-right"></i>
+    </div>
+
+    <div id="numeral{{numeral.id}}" class="collapse" data-parent="#numeral">
+        <div class="card-body" style="font-size:14px">
+
+            <!--modelo 14 numeral 61-->
+            {% if numeral.orden == 61 %}
+
+            <div>
+                {% for modelo17 in numeral_61 %}
+                <form class="pt-2 pr-4 pl-4" id="modelo17/{{modelo17.id}}" name="numeral61" type="post"
+                    enctype="multipart/form-data">
+
+                    <div class="form-group">
+                        <div class="form-group row">
+                            <label for="telescopio" class="col-sm-2 col-form-label">Telescopio, instrumento,
+                                infraestructura:</label>
+                            <div class="col-sm-10">
+                                <input disabled class="form-control mb-1" type="text" name="telescopio_instrumento_infra"
+                                    id="telescopioModelo17{{modelo17.id}}"
+                                    value="{{modelo17.telescopio_instrumento_infra}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">URL: </label>
+                            <div class="col-sm-10">
+                                <input disabled class="form-control mb-1" type="text" name="url"
+                                    id="urlModelo17{{modelo17.id}}" value="{{modelo17.url}}">
+                            </div>
+                        </div>
+
+                        <label for="">Descripción: </label>
+                        <textarea disabled class="form-control mb-1" name="descripcion"
+                            id="descripcionModelo17{{modelo17.id}}" cols="30"
+                            rows="5">{{modelo17.descripcion}}</textarea>
+
+                        <input disabled class="form-control" accept=".pdf, image/*" type="file" name="anexo"
+                            id="anexoModelo17{{modelo17.id}}">
+                        <small class="mb-2">Tamaño máximo: 5 Mb</small>
+
+                        {%if modelo17.anexo %}
+                        <strong>Actualmente: </strong><a
+                            href="{{modelo17.anexo.url}}">{{modelo17.anexo.name|nombreFile}}</a>
+                        {% endif %}
+
+                        <div class="justify-content-end d-flex">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-success actualizar" title="Guardar cambios">
+                                        <i class="fas fa-save">&nbsp;Guardar</i>
+                                    </button>
+
+                                    <button class="btn btn-warning text-white editar" type="reset">
+                                        <i class="fas fa-ban text-white">&nbsp;Cancelar</i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-primary editar" title="Editar entrada">
+                                        <i class="fas fa-edit">&nbsp;Editar</i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-danger eliminar" title="Eliminar entrada">
+                                        <i class="fas fa-trash-alt">&nbsp;Eliminar</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+                <hr>
+                {% empty %}
+                <div class="alert alert-danger m-4" id="sinEntradas{{numeral.id}}" role="alert">
+                    <strong>
+                        <p class="text-center ">Sin entradas</p>
+                    </strong>
+                </div>
+                <button title="Asignar informacion anterior" type="button" class="btn btn-link"
+                    id="infoAnteriorModelo17{{numeral.id}}" onclick="Modelo17.infoAnterior({{numeral.id}})">Importar
+                    periodo
+                    anterior</button>
+                {% endfor %}
+
+                <div class="w-100 mt-2"></div>
+                <button onclick="crear_entrada({{numeral.id}} , 'modelo17')" type="button"
+                    id="modelo17Crear{{numeral.id}}" class="btn btn-danger"><i class="fas fa-plus-circle"></i>&nbsp;
+                    Agregar entrada</button>
+
+                <p style="cursor: pointer;" data-toggle="collapse" data-target="#numeral{{numeral.id}}"
+                    class="text-primary  float-right">Cerrar&nbsp;<i class="fa fa-chevron-up"></i></p>
+            </div>
+
+            {% endif %}
+            <!--Fin Numeral 61 Modelo17-->
+        </div>
+
+
+    </div>
+    {% endfor %}
+
+</div>
+
+{% block JsCode %}
+
+<script>
+
+    function glosario() {
+        Swal.fire({
+            title: 'Glosario',
+            html: `<table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center" colspan="2">I. INVESTIGACIÓN CIENTIFICA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>No aplica</td></tr>
+                        </tbody>
+                    </table>`,
+            width: 880,
+            confirmButtonText: 'Cerrar',
+        });
+    }
+   
+</script>
+{% endblock %}

@@ -1,0 +1,701 @@
+{% extends 'core/base.html' %}
+<!-- Secciones de la documentación-->
+{% load static %}
+
+{% block contenido %}
+
+<div class="container-fluid" style="margin-top: 100px;">
+    <div class="row">
+        <div class="col-12 col-lg-4">
+            <div class="d-flex justify-content-center justify-content-md-start mt-2">
+                <button type="button" onclick="notificacion.vistaPrevia()"
+                    class="text-white btn btn-success btn-sm mr-2">
+                    <i class="far fa-eye"></i> Vista Previa</button>
+
+                <a class="text-white btn btn-info btn-sm mr-2" href="{% url 'reportes:reportesEnviados' %}"><i
+                        class="fas fa-history"></i> Historico</a>
+
+                <button class="text-white btn btn-danger btn-sm" onclick="finalizarReporte()"><i
+                        class="fas fa-check"></i>
+                    Finalizar Reporte
+                </button>
+            </div>
+
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <div class="d-flex justify-content-center mt-2">
+                <strong>Periodo: <span id="nombre_periodo">{{periodoActual.nombre_periodo}}</span> </strong>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <div class="d-flex justify-content-end mt-2">
+
+                <form method="POST">
+                    <label for="periodo" class=""><strong>Periodo: </strong></label>
+                    <select class="form-control" name="periodoActual" id="periodoActual">
+                        {% for periodos in periodos %}
+                        <option value="{{periodos.id}}">{{periodos.nombre_periodo}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-2 mb-2">
+
+    <nav class="nav nav-tabs d-flex justify-content-between text-center">
+
+        <a id="investigacionCientifica" class="nav-item nav-link disabled active text-primary"
+            onclick="investigacionCientifica()" style="cursor: pointer;">I. Investigación<br>
+            Cientifica.</a>
+
+        <a id="formacionRH" class="nav-item nav-link" onclick="formacion_RH()" style="cursor: pointer;">II. Formación
+            de<br> RRHH.</a>
+
+        <a id="desarrolloTec" class="nav-item nav-link" onclick="desarrollo_tec_innov()" style="cursor: pointer;">III.
+            Desarrollo<br> Tec. e Innov.</a>
+
+        <a id="apoyoInstitucional" class="nav-item nav-link" onclick="apoyoInstitucional()" style="cursor: pointer;">IV.
+            Apoyo<br> Institucional</a>
+
+        <a id="informacionAdicional" class="nav-item nav-link" onclick="informacionAdicional()"
+            style="cursor: pointer;">V. Información <br>Adicional.</a>
+    </nav>
+
+    <div id="contenido" class="mb-4">
+
+    </div>
+
+    <ul class="pagination justify-content-center">
+        <li id="investigacionCientificaPag" class="page-item active"><a class="page-link"
+                onclick="investigacionCientifica()">1</a></li>
+        <li id="formacionRHPag" class="page-item"><a class="page-link" onclick="formacion_RH()">2</a></li>
+        <li id="desarrolloTecPag" class="page-item"><a class="page-link" onclick="desarrollo_tec_innov()">3</a></li>
+        <li id="apoyoInstitucionalPag" class="page-item"><a class="page-link" onclick="apoyoInstitucional()">4</a></li>
+        <li id="informacionAdicionalPag" class="page-item"><a class="page-link" onclick="informacionAdicional()">5</a>
+        </li>
+    </ul>
+</div>
+
+{%  endblock %}
+
+{% block JSCode %}
+<script src="{% static 'js/reporte_productividad.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        var periodo = $('select[name="periodoActual"]').val().trim();
+        investigacionCientifica(periodo);
+    });
+
+    function investigacionCientifica() {
+        var periodo = $('select[name="periodoActual"]').val().trim();
+
+        $.ajax({
+            type: "GET",
+            url: "{% url 'reportes:investigacion_cientifica' %}",
+            data: { 'periodoActual': periodo },
+            dataType: "html",
+        })
+            .done(function (response) {
+                $("#contenido").html(response);
+                //Navbar
+                $("#investigacionCientifica").addClass('disabled active text-primary')
+                $("#formacionRH").removeClass('disabled active text-primary')
+                $("#desarrolloTec").removeClass('disabled active text-primary')
+                $("#apoyoInstitucional").removeClass('disabled active text-primary')
+                $("#informacionAdicional").removeClass('disabled active text-primary')
+
+                //Paginador
+                $("#investigacionCientificaPag").addClass('active')
+                $("#formacionRHPag").removeClass('active')
+                $("#desarrolloTecPag").removeClass('active')
+                $("#apoyoInstitucionalPag").removeClass('active')
+                $("#informacionAdicionalPag").removeClass('active')
+                $('[data-toggle="modal"]').popover({
+                    trigger: 'hover',
+                    html: true,
+                    title: "Glosario:",
+                    content: `<small class="form-text text-muted mb-3">
+                                        Investigación Científica.
+                                        </small>`
+                });
+            })
+            .fail(function (response) {
+                notificacion.error(response);
+            });
+
+    }
+
+    function formacion_RH() {
+        var periodo = $('select[name="periodoActual"]').val().trim();
+        $.ajax({
+            type: "GET",
+            url: "{% url 'reportes:formacion_RH' %}",
+            data: { 'periodoActual': periodo },
+            dataType: "html",
+        })
+            .done(function (response) {
+                $("#contenido").html(response);
+                //Navbar
+                $("#investigacionCientifica").removeClass('disabled active text-primary')
+                $("#formacionRH").addClass('disabled active text-primary')
+                $("#desarrolloTec").removeClass('disabled active text-primary')
+                $("#apoyoInstitucional").removeClass('disabled active text-primary')
+                $("#informacionAdicional").removeClass('disabled active text-primary')
+
+                //Paginador
+                $("#investigacionCientificaPag").removeClass('active')
+                $("#formacionRHPag").addClass('active')
+                $("#desarrolloTecPag").removeClass('active')
+                $("#apoyoInstitucionalPag").removeClass('active')
+                $("#informacionAdicionalPag").removeClass('active')
+                $('[data-toggle="modal"]').popover({
+                    trigger: 'hover',
+                    html: true,
+                    title: "Glosario:",
+                    content: `<small class="form-text text-muted mb-3">
+                            Formación de RRHH </small>`});
+            })
+            .fail(function (response) {
+                notificacion.error(response);
+            });
+    }
+
+    function desarrollo_tec_innov() {
+        var periodo = $('select[name="periodoActual"]').val().trim();
+        $.ajax({
+            type: "GET",
+            url: "{% url 'reportes:DTI' %}",
+            data: { 'periodoActual': periodo },
+            dataType: "html",
+        })
+            .done(function (response) {
+                $("#contenido").html(response);
+                //Navbar
+                $("#investigacionCientifica").removeClass('disabled active text-primary')
+                $("#formacionRH").removeClass('disabled active text-primary')
+                $("#desarrolloTec").addClass('disabled active text-primary')
+                $("#apoyoInstitucional").removeClass('disabled active text-primary')
+                $("#informacionAdicional").removeClass('disabled active text-primary')
+
+                //Paginador
+                $("#investigacionCientificaPag").removeClass('active')
+                $("#formacionRHPag").removeClass('active')
+                $("#desarrolloTecPag").addClass('active')
+                $("#apoyoInstitucionalPag").removeClass('active')
+                $("#informacionAdicionalPag").removeClass('active')
+                $('[data-toggle="modal"]').popover({
+                    trigger: 'hover',
+                    html: true,
+                    title: "Glosario:",
+                    content: `<small class="form-text text-muted mb-3">
+                                Desarrollo Tecnológico e Innovación </small>`});
+            })
+            .fail(function (response) {
+                notificacion.error(response);
+            });
+    }
+
+    function apoyoInstitucional() {
+        var periodo = $('select[name="periodoActual"]').val().trim();
+        $.ajax({
+            type: "GET",
+            url: "{% url 'reportes:apoyo_institucional' %}",
+            data: { 'periodoActual': periodo },
+            dataType: "html",
+        })
+            .done(function (response) {
+                $("#contenido").html(response);
+                //Navbar
+                $("#investigacionCientifica").removeClass('disabled active text-primary')
+                $("#formacionRH").removeClass('disabled active text-primary')
+                $("#desarrolloTec").removeClass('disabled active text-primary')
+                $("#apoyoInstitucional").addClass('disabled active text-primary')
+                $("#informacionAdicional").removeClass('disabled active text-primary')
+
+                //Paginador
+                $("#investigacionCientificaPag").removeClass('active')
+                $("#formacionRHPag").removeClass('active')
+                $("#desarrolloTecPag").removeClass('active')
+                $("#apoyoInstitucionalPag").addClass('active')
+                $("#informacionAdicionalPag").removeClass('active')
+                $('[data-toggle="modal"]').popover({
+                    trigger: 'hover',
+                    html: true,
+                    title: "Glosario:",
+                    content: `<small class="form-text text-muted mb-3">
+                            Apoyo Institucional </small>`});
+            })
+            .fail(function (response) {
+                notificacion.error(response);
+            });
+    }
+
+    function informacionAdicional() {
+        var periodo = $('select[name="periodoActual"]').val().trim();
+        $.ajax({
+            type: "GET",
+            url: "{% url 'reportes:informacion_adicional' %}",
+            data: { 'periodoActual': periodo },
+            dataType: "html",
+        })
+            .done(function (response) {
+                $("#contenido").html(response);
+
+                //Navbar
+                $("#investigacionCientifica").removeClass('disabled active text-primary')
+                $("#formacionRH").removeClass('disabled active text-primary')
+                $("#desarrolloTec").removeClass('disabled active text-primary')
+                $("#apoyoInstitucional").removeClass('disabled active text-primary')
+                $("#informacionAdicional").addClass('disabled active text-primary')
+
+                //Paginador
+                $("#investigacionCientificaPag").removeClass('active')
+                $("#formacionRHPag").removeClass('active')
+                $("#desarrolloTecPag").removeClass('active')
+                $("#apoyoInstitucionalPag").removeClass('active')
+                $("#informacionAdicionalPag").addClass('active')
+                $('[data-toggle="modal"]').popover({
+                    trigger: 'hover',
+                    html: true,
+                    title: "Glosario:",
+                    content: `<small class="form-text text-muted mb-3">No aplica</small>`
+                });
+            })
+            .fail(function (response) {
+                notificacion.error(response);
+            });
+    }
+
+    function finalizarReporte() {
+        notificacion.finalizarR($('#nombre_periodo').text())
+    }
+
+    function icono(id) {
+        $(".numeral" + id).toggleClass('fas fa-chevron-up')
+    }
+
+    $('#periodoActual').change(function () {
+
+        if ($('#investigacionCientifica').hasClass('disabled')) {
+            investigacionCientifica(this.options['selectedIndex']);
+        }
+        else if ($('#formacionRH').hasClass('disabled')) {
+            formacion_RH(this.options['selectedIndex']);
+        }
+        else if ($('#desarrolloTec').hasClass('disabled')) {
+            desarrollo_tec_innov(this.options['selectedIndex']);
+        }
+        else if ($('#apoyoInstitucional').hasClass('disabled')) {
+            apoyoInstitucional(this.options['selectedIndex']);
+        }
+        else {
+            informacionAdicional(this.options['selectedIndex'])
+        }
+
+        //Notificar del cambio de periodo
+        var index = this.options['selectedIndex']
+        var nombreP = this.options[index].text;
+        notificacion.periodo(nombreP)
+        $("#nombre_periodo").html(nombreP) //Cambiar etiqueta central
+    })
+
+    function token(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var notificacion = {
+        fecha: function (id) {
+            var formData = new FormData(document.getElementById("biblioteca" + id))
+
+            
+            fecha = $("#fecha" + id).val().trim()
+            mes = fecha[5] + fecha[6]
+            if (expresion.test(fecha) && mes <= 12 && mes != 00) {
+                var resultado = []
+                resultado[0] = true;
+                fecha_ano = fecha.substring(0, 4);
+                formData.append('fecha_ano', fecha_ano)
+                resultado[1] = formData;
+                return resultado;
+            }
+            else {
+                Swal.fire({
+                    title: 'Fecha incorrecta o faltante',
+                    text: 'Ingrese la fecha en formato YYYY/MM',
+                    icon: 'info',
+                });
+                return false;
+            }
+        },
+        error: function (message) {
+            Swal.fire({
+                title: 'Error en la solicitud',
+                text: 'Algo salio mal [Code: ' + message.statusText + " ]",
+                icon: 'error',
+            });
+        },
+        periodo: function (periodo) {
+            Swal.fire({
+                title: 'Periodo cambiado',
+                text: 'se cambio al periodo ' + periodo,
+                icon: 'info',
+                showConfirmButton: false,
+                timerProgressBar: true,
+                timer: 2000
+            });
+
+        },
+        finalizarR: function (periodo) {
+            Swal.fire({
+                title: 'Finalizar Reporte',
+                html: '¿Está seguro(a) de finalizar su reporte correspondiente al periodo ' + periodo + ' ?' + '<br> Verificar todos los numerales con Vista Previa y actualizar sus citas.'
+                    + '<br><i style="font-size:100px" class="fas fa-envelope text-muted"></i>',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                cancelButtonColor: '#d33',
+                confirmButtonText: '<i class="fas fa-check"></i> Aceptar',
+                cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+            }).then((result) => {
+                if (result.value) {
+                    periodoActual = $("select[name='periodoActual']").val().trim()
+                    $.ajax({
+                        type: "GET",
+                        url: '{% url "reportes:enviar-Reporte" %}',
+                        data: { 'periodoActual': periodoActual },
+                        dataType: "Json",
+                        beforeSend: function (response) {
+                            Swal.fire({
+                                title: 'Procesando',
+                                html: 'Espere unos segundos ..',
+                                icon: 'info',
+                                allowOutsideClick: false,
+                                timerProgressBar: true,
+                                willOpen: () => {
+                                    Swal.showLoading()
+                                },
+                            })
+                        },
+
+                    })
+                        .done(function (response) {
+                            if (!response.perfil) {
+                                Swal.fire({
+                                    title: 'Perfil incompleto',
+                                    icon: 'error',
+                                    html: `Faltan datos en su perfil, por favor editalo y vuelva a intentarlo`,
+                                    allowOutsideClick: false,
+                                });
+                            } else {
+                                if (response.actualizado) {
+                                    Swal.fire({
+                                        title: 'Reporte Finalizado',
+                                        html: `<small><p>El reporte <strong>${response.periodo}</strong></p> <p>fue actualizado y enviado a la Coordinación.</p>
+                                            <p>En breve recibirá un correo de confirmación.</p></small><i style="font-size:100px" class="fas fa-check-circle text-info"></i>`,
+
+                                        allowOutsideClick: false,
+                                    });
+                                }
+                                else {
+                                    Swal.fire({
+                                        title: 'Reporte Finalizado',
+                                        html: `<small><p>El reporte <strong>${response.periodo}</strong></p> <p>fue enviado a la Coordinación.</p>
+                                    <p>En breve recibirá un correo de confirmación</p></small> <i style="font-size:100px" class="fas fa-check-circle text-success"></i>`,
+                                        allowOutsideClick: false,
+                                    });
+                                }
+                            }
+
+                        })
+                        .fail(function (response) {
+                            notificacion.error(response);
+                        });
+                }
+
+            }).catch((err) => {
+
+            });;
+        },
+        vistaPrevia: function () {
+            var periodoActual = $('select[name="periodoActual"] option:selected').text() //ID
+            var periodo_id = $('select[name="periodoActual"] option:selected').val() //ID
+            var csrfmiddlewaretoken = token('csrftoken');
+            Swal.fire({
+                title: 'Generando vista previa <br>' + `[${periodoActual}]`,
+                html: 'espere unos segundos...',
+                icon: 'info',
+                allowOutsideClick: false,
+                timerProgressBar: true,
+                willOpen: () => {
+                    Swal.showLoading()
+                },
+            })
+            var req = new XMLHttpRequest();
+            req.open("POST", "{% url 'reportes:generarReporte' %}", true);
+
+            req.responseType = "blob";
+            var formData = new FormData();
+            formData.append('periodo', periodo_id)
+            formData.append('csrfmiddlewaretoken', csrfmiddlewaretoken)
+            req.onload = function (event) {
+                var blob = req.response;
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "Periodo-" + periodoActual + ".pdf";
+                link.click();
+                Swal.fire({
+                    title: 'Reporte generado',
+                    text: 'Se genero el reporte exitosamente',
+                    icon: 'success'
+                })
+            };
+            req.send(formData);
+
+        },
+        errorImportarPeriodo: function () {
+            Swal.fire({
+                title: 'Sin datos',
+                icon: 'error',
+                text: 'No existen datos en el periodo anterior',
+            })
+        },
+        importarPeriodo: function () {
+            Swal.fire({
+                title: 'Operacion exitosa',
+                icon: 'success',
+                text: 'No olvide guardar los datos importados',
+            })
+        },
+    }
+
+    $(document).on('change', 'input[type="file"]', function () {
+        // this.files[0].size recupera el tamaño del archivo
+        // alert(this.files[0].size);
+
+        var fileName = this.files[0].name;
+        var fileSize = this.files[0].size;
+
+        if (fileSize > 20000000) {
+            Swal.fire({
+                title: 'Tamaño de archivo',
+                icon: 'error',
+                text: 'El archivo no debe superar los 20MB',
+            })
+
+            this.value = '';
+            //this.files[0].name = '';
+        } else {
+            // recuperamos la extensión del archivo
+            var ext = fileName.split('.').pop();
+
+            // Convertimos en minúscula porque 
+            // la extensión del archivo puede estar en mayúscula
+            ext = ext.toLowerCase();
+
+            // console.log(ext);
+            switch (ext) {
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                case 'pdf': break;
+                default:
+                    Swal.fire({
+                        title: 'Tipo de archivo incorrecto',
+                        icon: 'error',
+                        text: 'EL archivo debe ser un pdf o imagen',
+                    })
+                    this.value = ''; // reset del valor
+                //this.files[0].name = '';
+            }
+        }
+    });
+
+    $(document).on('click', '.editar', function () {
+        var form = $(this).closest('form')[0];
+
+        if ($(this).prop('type') == "reset") {
+            $(form).find('input, Textarea, select').each(function () {
+                $(this).prop('disabled', true);
+            });
+        }
+        else if ($(this).prop('type') == "button") {
+            $(form).find('input, Textarea, select').each(function () {
+                $(this).prop('disabled', false);
+            });
+        }
+    });
+    $(document).on('click', '.actualizar', function () {
+        var form = $(this).closest('form');
+        var formData = new FormData(form[0]);
+        var fecha = $(form).find('input[name="fecha"]')[0];
+        var id = $(form).attr('id');
+
+        if(fecha){
+            var expresion = /[1-2][0][1-9][0-9][/][0-1][0-9]/;
+            var fecha = $(fecha).val();
+            var mes = fecha[5] + fecha[6]
+        
+            if (expresion.test(fecha) && mes <= 12 && mes != 00) {
+                var fecha_ano = fecha.substring(0, 4);
+                formData.append('fecha_ano', fecha_ano)
+            }
+            else {
+                Swal.fire({
+                    title: 'Fecha incorrecta o faltante',
+                    text: 'Ingrese la fecha en formato YYYY/MM',
+                    icon: 'info',
+                });
+                return false;
+            }
+        }
+        
+        $.ajax({
+            type: "PATCH",
+            url: `http://127.0.0.1:8000/API/${id}/`,
+            headers: { 'X-CSRFToken': token("csrftoken") },
+            data: formData,
+            enctype: "multipart/form-data",
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            beforeSend: function () {
+                Swal.fire({
+                    title: 'Actualizando entrada',
+                    html: 'No salga del sitio, espere unos segundos...',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    timerProgressBar: true,
+                    willOpen: () => {
+                        Swal.showLoading()
+                    },
+                })
+            },
+            success: function (response) {
+                $(form).find('input, Textarea, select').each(function () {
+                    $(this).prop('disabled', true);
+                });
+                Swal.fire({
+                    title: 'Actualizado',
+                    text: 'Entrada actualizada exitosamente',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timerProgressBar: true,
+                    timer: 2000
+                });
+            },
+            error: function (response) {
+                notificacion.error(response);
+            }
+        })
+    });
+    $(document).on('click', '.eliminar', function () {
+        Swal.fire({
+            title: 'Eliminar entrada',
+            text: "¿Desea eliminar esta entrada?",
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            confirmButtonText: '<i class="fas fa-check"></i> Aceptar',
+            cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+
+        }).then((result) => {
+            if (result.value) {
+                var form = $(this).closest('form')[0];
+                var id = $(form).attr('id');
+
+                $.ajax({
+                    type: "DELETE",
+                    headers: { 'X-CSRFToken': token("csrftoken") },
+                    url: `http://127.0.0.1:8000/API/${id}/`,
+                    success: function (response) {
+                        $(form).remove();
+                        Swal.fire({
+                            title: 'Eliminada',
+                            text: 'Entrada eliminada exitosamente',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                            timer: 2000
+                        });
+                    },
+                    error: function (err) {
+                        notificacion.error(err)
+                    }
+                });
+
+
+            }
+        });
+
+    });
+    function crear_entrada(numeral, modelo) {
+        var periodo_id = $("#periodoActual").val();
+
+        $.ajax({
+            type: "POST",
+            url: `http://127.0.0.1:8000/API/${modelo}/`,
+            headers: { 'X-CSRFToken': token("csrftoken") },
+            data: {
+                'usuario': "{{ user.id }}",
+                'numeral_id': numeral,
+                'periodo': periodo_id
+            },
+            dataType: "JSON",
+            success: function (response) {
+                $("#sinEntradas" + numeral).remove()
+                $("#infoAnterior" + modelo.charAt(0).toUpperCase() + modelo.slice(1) + numeral).remove()
+
+                switch (modelo) {
+                    case 'modelo1': Modelo1.dibujar(response); break;
+                    case 'modelo2': Modelo2.dibujar(response); break;
+                    case 'modelo3': Modelo3.dibujar(response); break;
+                    case 'modelo4': Modelo4.dibujar(response); break;
+                    case 'modelo5': Modelo5.dibujar(response); break;
+                    case 'modelo6': Modelo6.dibujar(response); break;
+                    case 'modelo7': Modelo7.dibujar(response); break;
+                    case 'modelo8': Modelo8.dibujar(response); break;
+                    case 'modelo9': Modelo9.dibujar(response); break;
+                    case 'modelo10': Modelo10.dibujar(response); break;
+                    case 'modelo11': Modelo11.dibujar(response); break;
+                    case 'modelo12': Modelo12.dibujar(response); break;
+                    case 'modelo13': Modelo13.dibujar(response); break;
+                    case 'modelo14': Modelo14.dibujar(response); break;
+                    case 'modelo15': Modelo15.dibujar(response); break;
+                    case 'modelo16': Modelo16.dibujar(response); break;
+                    case 'modelo17': Modelo17.dibujar(response); break;
+                    case 'modelo18': Modelo18.dibujar(response); break;
+                }
+                Swal.fire({
+                    title: 'Creada',
+                    text: 'Entrada creada exitosamente',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timerProgressBar: true,
+                    timer: 2000
+                });
+            },
+            error: function (response, err, err2) {
+                notificacion.error(response)
+            }
+        });
+    }
+
+</script>
+{% endblock %}

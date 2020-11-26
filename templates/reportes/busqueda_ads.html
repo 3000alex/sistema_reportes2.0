@@ -1,0 +1,128 @@
+{% extends 'core/base.html' %}
+{% block contenido %}
+{% load static %}
+
+<div class="container pb-4" style="margin-top: 150px;">
+
+    <div class="card">
+
+        <div class="card-header">
+            <div class="row">
+                <div class="col-12">
+                    <strong>
+                        <p style="font-size:20px;" class="text-center">Búsqueda de publicaciones (basado en NASA/ADS)
+                        </p>
+                    </strong>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="mt-2 col-12">
+                    <p class="text-muted">QUICK:
+                        <button id="autor" class="btn btn-link">author</button>
+                        <button id="primer_autor" class="btn btn-link">1st author</button>
+                        <button id="año" class="btn btn-link">year</button>
+                        <button id="abstract" class="btn btn-link">abstract</button>
+                        <button id="title" class="btn btn-link">title</button>
+                        <button id="database" class="btn btn-link">database</button>
+                    </p>
+                </div>
+            </div>
+    
+            <hr>
+            <div class="row">
+                <form class="col-12" method="GET" action="{% url 'reportes:publicaciones_generales' %}"
+                    id="formBusquedaGeneral">
+                    <label for="autor">Búsqueda general:</label>
+                    <div class="input-group">
+    
+                        <input class="form-control col-12" type="text" name="query" id="busquedaGeneral"
+                            class="form-control" id="author" aria-describedby="inputGroupPrepend" required>
+                        <input type="hidden" name="metodo" value="general">
+                        <div class="input-group-append">
+                            <button class="text-white btn btn-primary sesion">Buscar &nbsp;<i
+                                    class="fas fa-search"></i></button>
+                        </div>
+    
+                    </div>
+                </form>
+            </div>
+    
+            <div class="row">
+    
+                <div class="mt-4 col-12 col-sm-6">
+                    <p><strong>autor</strong> Hawking, S</p>
+                    <p><strong>1er autor</strong> ^Hawking, S</p>
+                    <p><strong>año</strong> year:2012</p>
+                    <p><strong>rango</strong> year:2000-2015</p>
+                    <p><strong>abstract</strong> abs:"OAGH"</p>
+                    <p><strong>astronomía</strong> database:"astronomy"</p>
+    
+                </div>
+    
+                <div class="mt-4 col-12 col-sm-6">
+                    <strong>ejemplos:</strong>
+                    <p style="margin-left: 70px;">Haro abs:"T Tauri" year:1960-1965</p>
+                    <p style="margin-left: 70px;">^Faber author:"Dressler"</p>
+                    <p style="margin-left: 70px;">Hubble, E year:1920</p>
+                    <p style="margin-left: 70px;">author: "Smith, A" database:"astronomy"</p>
+                    <p style="margin-left: 70px;">title: "Event Horizon Telescope"</p>
+    
+                </div>
+    
+            </div>
+            
+            <hr>
+    
+            <div class="row">
+                <form class="col-12" method="GET" action="{% url 'reportes:publicaciones_generales' %}"
+                    id="formBusquedaBibcode">
+                    <label for="bibcode">BibCode:</label>
+                    <div class="input-group">
+                        <input placeholder="ejemplo: 2018MNRAS.479..917G" class="form-control" type="text" name="query"
+                            id="bibcode" required>
+                        <input type="hidden" name="metodo" value="bibcode">
+                        <div class="input-group-append">
+                            <button class="text-white btn btn-primary sesion">Buscar &nbsp;<i
+                                    class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <hr>
+    
+            <div class="row">
+                <form class="col-12" method="GET" action="{% url 'reportes:publicaciones_generales' %}"
+                    id="formBusquedaOrcid">
+                    <label for="orcid">ORCID:</label>
+                    <div class="input-group">
+                        <input placeholder="0000-0002-1825-0097" class="form-control" value="{{user.orcId}}" type="text"
+                            name="query" id="orcid" required>
+                        <input type="hidden" name="metodo" value="orcid">
+                        <div class="input-group-append">
+                            <button class="text-white btn btn-primary sesion">Buscar &nbsp;<i
+                                    class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+    
+                    {% if user.orcId == "" %}
+                    <small> &nbsp;&nbsp; No tiene asignado un ORCID iD en su <a
+                            href="{% url 'registration:actualizar-perfil' %}">perfil.</a></small>
+    
+                    {% endif %}
+                </form>
+            </div>
+            <hr>
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block JSCode %}
+<script src="{% static 'js/busqueda_ads.js' %}"></script>
+{% endblock %}

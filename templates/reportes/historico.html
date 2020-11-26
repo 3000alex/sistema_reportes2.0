@@ -1,0 +1,86 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+<div class="container" style="margin-top: 120px;">
+    <table id="reportesEnviados" class="table table-bordered table-striped text-center" style="width:100%">
+        <thead>
+            <tr>
+                <th>Reportes</th>
+                <th>Fecha de envio</th>
+                <th>PDF</th>
+                <th>Anexos</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+{% block JSCode %}
+<!--Data tables-->
+<script src="{% static 'DataTables/datatables.min.js'%}"></script>
+<link rel="stylesheet" href="{% static 'DataTables/datatables.min.css'%}">
+<script>
+    $('#reportesEnviados').DataTable({
+        "language": {
+            "lengthMenu": "Mostrar _MENU_ reportes",
+            "zeroRecords": "No se encontraron resultados",
+            "info": "<small>Mostrando reportes del _START_ al _END_ de un total de _TOTAL_ registros</small>",
+            "infoEmpty": "No existen reportes enviados",
+            "infoFiltered": "(filtrado de un total de _MAX_ registros",
+            "sSearch": "Buscar:",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Ultimo",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior",
+            },
+            "sProcessing": "Procesando..."
+        },
+        dom: 'lifBtp',
+        "pageLength": 50,
+        "lengthMenu": [[5, 10, 20, 25, 50, -1], [5, 10, 20, 25, 50, "Todos"]],
+        "order": [[1, "desc"]],
+        responsive: true,
+        "ajax": {
+            "url": 'http://127.0.0.1:8000/API/reportes_finalizados/',
+            "dataSrc": "",
+            "data": {
+                'id_usuario': "{{user.id}}"
+            }
+        },
+        "columns": [
+            { "data": "periodo.nombre_periodo" },
+            {
+                sortable: false,
+                "render": function (data, type, full, meta) {
+                    var fecha = new Date(full.fecha_de_creacion)
+                    var meses = new Array("Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic");
+                    var dia;
+                    if ((fecha.getDate() < 10)) {
+                        dia = '0' + fecha.getDate();
+                    } else {
+                        dia = fecha.getDate();
+                    }
+                    return dia + '-' + meses[fecha.getMonth()] + '-' + fecha.getFullYear();
+                }
+            },
+            {
+                sortable: false,
+                "render": function (data, type, full, meta) {
+                    return `<a download href="${full.reporte}" target="_blank" ><i style="font-size:35px;" class="far fa-file-pdf text-danger mr-2"></i></a>`
+                }
+            },
+            {
+                sortable: false,
+                "render": function (data, type, full, meta) {
+                    return `<a download href="${full.anexo}" target="_blank" ><i style="font-size:35px;" class="far fa-file-archive"></i> </a>`
+                }
+            },
+        ]
+    }); //Fin de Usuarios  Datatable
+</script>
+
+<!--End data tables -->
+{% endblock %}
