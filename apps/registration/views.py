@@ -22,7 +22,7 @@ def login_view(request):
                 email = request.POST['email']
                 password = request.POST['password']
                 user = authenticate(request, email=email, password=password)
-                
+                print(user)
                 if user:
                    #user.is_authenticated
                    if user.last_login == None:
@@ -67,8 +67,7 @@ class ProfileUpdate(View):
         coordinacion = request.POST.get('coordinacion',obj.coordinacion_id)
         #arxiv_id = request.POST.get('arxiv_id',obj.arxivId)
         
-        print(correo_alternativo)
-        print(coordinacion)
+
         obj.nombre = nombre
         obj.correoAlternativo =  correo_alternativo
         obj.apellido = apellidos
