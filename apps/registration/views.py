@@ -19,9 +19,9 @@ def login_view(request):
     else:#else para redirigir a loguearse
         context = {}
         if request.method == "POST":
-                email = request.POST['email']
+                usuario = request.POST['usuario']
                 password = request.POST['password']
-                user = authenticate(request, email=email, password=password)
+                user = authenticate(request, username=usuario, password=password)
                 print(user)
                 if user:
                    #user.is_authenticated
@@ -35,7 +35,7 @@ def login_view(request):
                         if 'sesion' in context:
                             return render(request, "core/pantalla_bienvenida_adm.html",context)
                         else:
-                            return render(request, "administradores/home.html",context)
+                            return render(request, "administradores/reportes_adm.html",context)
                    else:
                         if 'sesion' in context:
                             Citas.objects.create(numeral_id = 31,  usuario_id = user.id)
@@ -57,8 +57,8 @@ class ProfileUpdate(View):
 
     def post(self,request):
         obj = User.objects.get(id=request.user.id)
-        nombre = request.POST.get('nombres',obj.nombre)
-        apellidos = request.POST.get('apellidos',obj.apellido)
+        nombre = request.POST.get('nombres',obj.first_name)
+        apellidos = request.POST.get('apellidos',obj.last_name)
         correo_alternativo = request.POST.get('correo_alternativo',obj.correoAlternativo)
         nombre_corto = request.POST.get('nombre_corto',obj.nombreCorto)
         categoria = request.POST.get('categoria',obj.categoria)
@@ -68,9 +68,9 @@ class ProfileUpdate(View):
         #arxiv_id = request.POST.get('arxiv_id',obj.arxivId)
         
 
-        obj.nombre = nombre
+        obj.first_name = nombre
         obj.correoAlternativo =  correo_alternativo
-        obj.apellido = apellidos
+        obj.last_name = apellidos
         obj.nombreCorto = nombre_corto
         obj.categoria = categoria
         obj.nivelSni = nivel_sni

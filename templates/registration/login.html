@@ -8,7 +8,7 @@
 {% block login %}
 <div class="container-fluid centrar">
     <div class="row justify-content-center align-items-center">
-        <div class="col col-sm-6 col-md-6 col-lg-5 col-xl-3 card p-5">
+        <div class="col col-sm-6 col-md-6 col-lg-5 col-xl-3 card p-5 shadow-lg">
             <div class="text-center mb-2">
                 <h3 class="">Bienvenido</h3>
                 <h4 class="">Sistema de reportes</h4>
@@ -17,8 +17,8 @@
             <form method="POST">
                 {% csrf_token %}
                 <div class="form-group  mb-4">
-                    <label for="email">Ingrese su correo</label>
-                    <input name="email" class="form-control " placeholder="Ingrese su email" type="text">
+                    <label for="usuario">Ingrese su usuario</label>
+                    <input name="usuario" class="form-control " placeholder="Ingrese su usuario" type="text">
                 </div>
                 <div class="form-group  mb-4">
                     <label for="password">Ingrese su contraseña</label>

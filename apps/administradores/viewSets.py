@@ -48,7 +48,7 @@ class InvestigadoresViewSet(viewsets.ModelViewSet):
 
         body = render_to_string(
             'administradores/templateBienvenida.html', {
-                'nombre': user.nombre,
+                'nombre': user.first_name,
                 'apellido': user.apellido,
                 'password': password,
                 'correo': user.email,

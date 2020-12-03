@@ -1,6 +1,10 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 # Register your models here.
 from .models import User,Coordinacion
 
-admin.site.register(User)
+class permisos(UserAdmin):
+    pass
+
+admin.site.register(User,permisos)
 admin.site.register(Coordinacion)

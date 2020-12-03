@@ -148,36 +148,3 @@ SESSION_COOKIE_AGE = 600  # 0r 5 * 60, same thing
 SESSION_SAVE_EVERY_REQUEST = True   
 
 #Configuracion LDAP server
-import ldap
-from django_auth_ldap.config import LDAPSearch
-
-AUTH_LDAP_SERVER_URI = 'ldap://tlali.inaoep.mx ldap://atl.inaoep.mx ldap://ehecatl.inaoep.mx'
-AUTH_LDAP_BIND_DN = ""
-AUTH_LDAP_BIND_PASSWORD = ""
-AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=People,dc=inaoep,dc=mx", ldap.SCOPE_SUBTREE,"(uid=%(user)s)")
-AUTH_LDAP_START_TLS = True
-AUTHENTICATION_BACKENDS = [
-            'django_auth_ldap.backend.LDAPBackend',
-                'django.contrib.auth.backends.ModelBackend',
-]
-
-"""
-AUTH_LDAP_USER_ATTR_MAP = {
-            "username": "sAMAccountName",
-                "first_name": "givenName",
-                    "last_name": "sn",
-                        "email": "mail",
-}
-from django_auth_ldap.config import ActiveDirectoryGroupType
-AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
-            "dc=tech,dc=local", ldap.SCOPE_SUBTREE, "(objectCategory=Group)"
-            )
-AUTH_LDAP_GROUP_TYPE = ActiveDirectoryGroupType(name_attr="cn")
-AUTH_LDAP_USER_FLAGS_BY_GROUP = {
-            "is_superuser": "CN=django-admins,CN=Users,DC=TECH,DC=LOCAL",
-            "is_staff": "CN=django-admins,CN=Users,DC=TECH,DC=LOCAL",
-            }
-AUTH_LDAP_FIND_GROUP_PERMS = True
-AUTH_LDAP_CACHE_GROUPS = True
-AUTH_LDAP_GROUP_CACHE_TIMEOUT = 1  # 1 hour cache
-"""
