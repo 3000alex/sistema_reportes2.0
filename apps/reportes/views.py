@@ -1155,7 +1155,7 @@ class enviarReporte(View):
         yearPeriodo = periodo.fecha_inicio.year
         data = {'periodo':periodo.nombre_periodo,}
         
-        if request.user.categoria != 'Sin especificar' and request.user.nivelSni != 'Sin especificar' and request.user.coordinacion and request.user.first_nameCorto:
+        if request.user.categoria != 'Sin especificar' and request.user.nivelSni != 'Sin especificar' and request.user.coordinacion and request.user.nombreCorto:
             data['perfil'] = True
             #Hacemos conexion conn la BD para obtener los anexo de cada nuemral del usuario y del periodo(año)
             anexoModelo1 = Modelo1.objects.anexo(usuario,yearPeriodo)
@@ -1197,7 +1197,7 @@ class enviarReporte(View):
             body = render_to_string(
                 'reportes/templateReportesFinalizadoUsuario.html', {
                     'nombre': request.user.first_name,
-                    'apellido': request.user.apellido,
+                    'apellido': request.user.last_name,
                     'periodo':periodo.nombre_periodo,
                 },
             )
@@ -1223,7 +1223,7 @@ class enviarReporte(View):
             bodyAdmin = render_to_string(
             'reportes/templateReporteFinalizado.html',{
                 'nombre':request.user.first_name,
-                'apellido': request.user.apellido,
+                'apellido': request.user.last_name,
                 'periodo': periodo.nombre_periodo,
             }   
             )
@@ -1263,8 +1263,7 @@ class enviarReporte(View):
                     os.remove(os.path.join(BASE_DIR + '/media/'+obj.anexo.name))
                 
             obj.reporte.save('Reporte '+periodo.nombre_periodo+' '+str(request.user.first_name)+'.pdf', ContentFile(pdf), save=False)
-            print(BASE_DIR+ '/media/'+'anexo_zip/anexo.zip')
-            print(os.path.isdir(os.path.dirname(BASE_DIR+ '/media/'+'anexos_zip/anexo.zip')))
+            
             
             #Genera Zip con anexo
             with zipfile.ZipFile(BASE_DIR + '/media/'+'anexos_zip/anexo.zip', mode='w', compression=zipfile.ZIP_DEFLATED) as anexoZip:

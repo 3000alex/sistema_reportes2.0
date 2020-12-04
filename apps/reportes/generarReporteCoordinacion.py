@@ -27,8 +27,7 @@ def generarPdf(request,periodo_id):
         'numeral': Numeral.objects.all(),
         'coordinacion':request.user.coordinacion,
         'citas': Citas.objects.generarPdf(usuario_id),
-        #'biblioteca': Biblioteca.objects.generarPdf(usuario_id,yearPeriodo),
-        
+    
         'modelo1': Modelo1.objects.generarPdf(usuario_id,yearPeriodo),
         'modelo2': Modelo2.objects.generarPdf(usuario_id,yearPeriodo),
         'modelo3': Modelo3.objects.generarPdf(usuario_id,yearPeriodo),

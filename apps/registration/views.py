@@ -39,6 +39,7 @@ def login_view(request):
                    else:
                         if 'sesion' in context:
                             Citas.objects.create(numeral_id = 31,  usuario_id = user.id)
+                            user.email = usuario + '@inaoep.mx'
                             return render(request, "core/pantalla_bienvenida.html",context)
                         else:
                             return render(request, "reportes/home.html",context)
@@ -59,6 +60,7 @@ class ProfileUpdate(View):
         obj = User.objects.get(id=request.user.id)
         nombre = request.POST.get('nombres',obj.first_name)
         apellidos = request.POST.get('apellidos',obj.last_name)
+        correo = request.POST.get('correo',None)
         correo_alternativo = request.POST.get('correo_alternativo',obj.correoAlternativo)
         nombre_corto = request.POST.get('nombre_corto',obj.nombreCorto)
         categoria = request.POST.get('categoria',obj.categoria)
@@ -67,7 +69,8 @@ class ProfileUpdate(View):
         coordinacion = request.POST.get('coordinacion',obj.coordinacion_id)
         #arxiv_id = request.POST.get('arxiv_id',obj.arxivId)
         
-
+        if correo:
+            obj.email = correo
         obj.first_name = nombre
         obj.correoAlternativo =  correo_alternativo
         obj.last_name = apellidos

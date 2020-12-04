@@ -19,7 +19,7 @@ from apps.administradores.reporteMaestro import Reporte
 
 class StaffRequiredMixin(object):
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_staff:
+        if not request.user.is_staff or not request.user.is_superuser:
             return redirect(reverse_lazy('reportes:home'))
         return super(StaffRequiredMixin, self).dispatch(request, *args, **kwargs)
 

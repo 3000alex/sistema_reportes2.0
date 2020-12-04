@@ -26,7 +26,7 @@
 
     <div class="datosInvestigador">
         <p> <strong> <u> PERIODO DEL REPORTE: ENERO - {{mesFin}} DE {{fecha_inicioP|date:"Y"}} </u> </strong> </P>
-        <p><strong>Nombre Completo: </strong>{{datosInvestigador.nombre}} {{datosInvestigador.apellido}}</p>
+        <p><strong>Nombre Completo: </strong>{{datosInvestigador.first_name}} {{datosInvestigador.last_name}}</p>
         <p><strong>Coordinación: </strong>{{coordinacion}}</p>
         <p><strong>Nombramiento: </strong>{{datosInvestigador.categoria}}</p>
         <p><strong>Nivel del SNI: </strong>{{datosInvestigador.nivelSni}}</p>
@@ -59,27 +59,6 @@
         <p>{{numeral}}</p>
 
         <div class="campos">
-            {% for biblioteca in biblioteca %}
-            <!--Numerales 1, 2, 3, 4, 5, 7, 9, 11, 12, 13, 14 y 14a-->
-            {% if numeral.id == biblioteca.numeral_id %}
-            <ul>
-                <li>
-                    {% if biblioteca.autores %}{{biblioteca.autores|nombreCorto:biblioteca.usuario.nombreCorto|safe }},{% endif %}
-                    {% if biblioteca.titulo %}<i>{{biblioteca.titulo}}, </i>{% endif %}
-                    {% if biblioteca.revista_publicacion %}{{biblioteca.revista_publicacion}}, {% endif %}
-                    {% if biblioteca.volumen %}{{biblioteca.volumen}}, {% endif %}
-                    {% if biblioteca.paginas %}{{biblioteca.paginas}}, {% endif %}
-                    {% if biblioteca.fecha %}{{biblioteca.fecha}}.{% endif %}
-                    {% if biblioteca.estudiantes%}<br>Estudiantes: <span style="color: red;">{{ biblioteca.estudiantes }}</span>{% endif %}
-                    {% if biblioteca.doi %}<br>DOI: <a target="blank" href="https://ui.adsabs.harvard.edu/link_gateway/{{biblioteca.bibcode}}/doi:{{biblioteca.doi}}">{{biblioteca.doi}}</a>{% endif %}
-                    {% if biblioteca.bibcode %}<br>Bibcode: {{biblioteca.bibcode}} {% endif %}
-                    {% if biblioteca.url %}<br>URL: <a target="blank" href="{{biblioteca.url}}">{{biblioteca.url}}</a>{% endif %}
-                    {% if biblioteca.anexo %}<br>Anexo: {{biblioteca.anexo.name|nombreFile}}{% endif %}
-                </li>
-            </ul>
-            {% endif %}
-            {% endfor %}
-            <!--Fin Numerales Biblioteca-->
 
             {% for modelo1 in modelo1 %}
             {% if numeral.id == modelo1.numeral_id %}
@@ -88,9 +67,12 @@
                     {% if modelo1.autores %}{{modelo1.autores|nombreCorto:modelo1.usuario.nombreCorto|safe }},{% endif %}
                     {% if modelo1.titulo %}<i>{{modelo1.titulo}}, </i>{% endif %}
                     {% if modelo1.revista_publicacion %}{{modelo1.revista_publicacion}}, {% endif %}
+                    {% if modelo1.volumen %}{{modelo1.volumen}}, {% endif %}
+                    {% if modelo1.paginas %}{{modelo1.paginas}}, {% endif %}
                     {% if modelo1.fecha %}{{modelo1.fecha}}.{% endif %}
                     {% if modelo1.estudiantes %}<br>Estudiante(s): <span style="color: red;">{{ modelo1.estudiantes }}</span>{% endif %}
                     {% if modelo1.doi %}<br>DOI: <a target="blank" href="#">{{modelo1.doi}}</a>{% endif %}
+                    {% if modelo1.bibcode %}<br>Bibcode: {{modelo1.bibcode}} {% endif %}
                     {% if modelo1.url %}<br>URL: <a target="blank" href="{{modelo1.url}}">{{modelo1.url}}</a>{% endif %}
                     {% if modelo1.anexo %}<br>Anexo: {{modelo1.anexo.name|nombreFile}}{% endif %}
                 </li>
