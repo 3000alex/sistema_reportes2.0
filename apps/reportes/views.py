@@ -84,7 +84,7 @@ class agregar_biblioteca(View):
             fecha_aux = datetime.strptime(l['fecha'], '%Y/%m')
             periodo_mes = fecha_aux.month
             periodo_ano = fecha_aux.year
-            
+
             if periodo_mes < 6:
                 periodo_query = Periodo.objects.get(fecha_inicio__year=periodo_ano, fecha_inicio__month=1)
         

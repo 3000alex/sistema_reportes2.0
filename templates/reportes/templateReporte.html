@@ -61,7 +61,8 @@
         <div class="campos">
 
             {% for modelo1 in modelo1 %}
-            {% if numeral.id == modelo1.numeral_id %}
+            
+            {% if numeral.orden == modelo1.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo1.autores %}{{modelo1.autores|nombreCorto:modelo1.usuario.nombreCorto|safe }},{% endif %}
@@ -82,7 +83,7 @@
 
 
             {% for modelo2 in modelo2 %}
-            {% if numeral.id == modelo2.numeral_id %}
+            {% if numeral.orden == modelo2.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo2.nombre_del_proyecto %}Nombre del proyecto: {{modelo2.nombre_del_proyecto}} <br>{% endif %}
@@ -98,7 +99,7 @@
 
 
             {% for modelo3 in modelo3 %}
-            {% if numeral.id == modelo3.numeral_id %}
+            {% if numeral.orden == modelo3.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo3.conferencia_proyecto %}Nombre de la conferencia: {{modelo3.nombre_de_conferencia}}<br> {% endif %}
@@ -112,7 +113,7 @@
             {% endfor %}
 
             {% for modelo4 in modelo4 %}
-            {% if numeral.id == modelo4.numeral_id %}
+            {% if numeral.orden == modelo4.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo4.titulo %}Título de la presentación: {{modelo4.titulo}} <br> {% endif %}
@@ -131,7 +132,7 @@
 
 
             {% for modelo5 in modelo5 %}
-            {% if numeral.id == modelo5.numeral_id %}
+            {% if numeral.orden == modelo5.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo5.nombre_completo %}Nombre completo: {{modelo5.nombre_completo}} <br> {% endif %}
@@ -146,7 +147,7 @@
 
 
             {% for modelo6 in modelo6 %}
-            {% if numeral.id == modelo6.numeral_id %}
+            {% if numeral.orden == modelo6.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo6.nombre_del_curso %}Nombre del curso: {{modelo6.nombre_del_curso}} <br> {% endif %}
@@ -160,7 +161,7 @@
 
 
             {% for modelo7 in modelo7 %}
-            {% if numeral.id == modelo7.numeral_id %}
+            {% if numeral.orden == modelo7.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo7.nombre %}Nombre: {{modelo7.nombre}} <br> {% endif %}
@@ -177,7 +178,7 @@
 
 
             {% for modelo8 in modelo8 %}
-            {% if numeral.id == modelo8.numeral_id %}
+            {% if numeral.orden == modelo8.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo8.autores %}Autor(es): {{modelo8.autores}} <br> {% endif %}
@@ -191,7 +192,7 @@
 
 
             {% for modelo9 in modelo9 %}
-            {% if numeral.id == modelo9.numeral_id %}
+            {% if numeral.orden == modelo9.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo9.nombre %}Nombre: {{modelo9.nombre}} <br> {% endif %}
@@ -206,7 +207,7 @@
 
 
             {% for modelo10 in modelo10 %}
-            {% if numeral.id == modelo10.numeral_id %}
+            {% if numeral.orden == modelo10.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo10.titulo %}Título: {{modelo10.titulo}} <br> {% endif %}
@@ -224,7 +225,7 @@
 
 
             {% for modelo11 in modelo11 %}
-            {% if numeral.id == modelo11.numeral_id %}
+            {% if numeral.orden == modelo11.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo11.fecha %}Fecha: {{modelo11.fecha}} <br> {% endif %}
@@ -237,7 +238,7 @@
             {% endfor %}
 
             {% for modelo12 in modelo12 %}
-            {% if numeral.id == modelo12.numeral_id %}
+            {% if numeral.orden == modelo12.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo12.periodo_numeral %}Periodo: {{modelo12.periodo_numeral}} <br> {% endif %}
@@ -250,7 +251,7 @@
 
 
             {% for modelo13 in modelo13 %}
-            {% if numeral.id == modelo13.numeral_id %}
+            {% if numeral.orden == modelo13.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo13.nombre_del_estudiante %}Nombre del estudiante: {{modelo13.nombre_del_estudiante}}<br> {%endif%}
@@ -265,7 +266,7 @@
             {% endfor %}
 
             {% for modelo14 in modelo14 %}
-            {% if numeral.id == modelo14.numeral_id %}
+            {% if numeral.orden == modelo14.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo14.fecha_periodo %}Fecha o periodo: {{modelo14.fecha_periodo}} <br> {% endif %}
@@ -277,7 +278,7 @@
             {% endfor %}
 
             {% for modelo15 in modelo15 %}
-            {% if numeral.id == modelo15.numeral_id %}
+            {% if numeral.orden == modelo15.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo15.laboratorio_taller %}Laboratorio o taller: {{modelo15.laboratorio_taller}}{% endif %}
@@ -289,7 +290,7 @@
 
 
             {% for modelo16 in modelo16 %}
-            {% if numeral.id == modelo16.numeral_id %}
+            {% if numeral.orden == modelo16.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo16.agencias_financieras %}Agencia(s) financiadora(s): {{modelo16.agencias_financieras}},<br> {% endif %}
@@ -302,7 +303,7 @@
 
 
             {% for modelo17 in modelo17 %}
-            {% if numeral.id == modelo17.numeral_id %}
+            {% if numeral.orden == modelo17.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo17.telescopio_instrumento_infra %}Telescopio, instrumento, infraestructura: {{modelo17.telescopio_instrumento_infra}} <br> {% endif %}
@@ -316,7 +317,7 @@
 
 
             {% for modelo18 in modelo18 %}
-            {% if numeral.id == modelo18.numeral_id %}
+            {% if numeral.orden == modelo18.numeral.orden %}
             <ul>
                 <li>
                     {% if modelo18.descripcion %}Descripción: {{modelo18.descripcion}} <br> {% endif %}
@@ -327,12 +328,12 @@
             {% endfor %}
 
             {% for citas in citas %}
-            {% if numeral.id == citas.numeral_id %}
-            <p>Citas Totales: <strong>{{citas.citas}}</strong></p>
-            <p>Citas obtenidas durante el periodo del reporte: <strong>&nbsp; {{citas.citas_en_periodo}}</strong></p>
-            <p>30a. Índice H: <strong>{{citas.indiceH}}</strong></p>
-            {% if citas.anexo %}Anexo: {{citas.anexo.name|nombreFile}}{% endif %}
-            {% endif %}
+                {% if numeral.orden == citas.numeral.orden %}
+                    <p>Citas Totales: <strong>{{citas.citas}}</strong></p>
+                    <p>Citas obtenidas durante el periodo del reporte: <strong>&nbsp; {{citas.citas_en_periodo}}</strong></p>
+                    <p>30a. Índice H: <strong>{{citas.indiceH}}</strong></p>
+                {% if citas.anexo %}Anexo: {{citas.anexo.name|nombreFile}}{% endif %}
+                {% endif %}
             {% endfor %}
 
             {% endfor %}

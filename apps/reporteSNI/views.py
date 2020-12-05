@@ -6,28 +6,29 @@ from django.views.generic import View, ListView
 # Librerias para validar el login
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-#from apps.biblioteca.models import Biblioteca
+from apps.reportes.models import Modelo1
 #from SNIads import SNIads
 import os
 from sistema_reportes.settings import BASE_DIR
 token = "71EV2aJvIIiFZLSoA9cWRlxgjxTQKwykjEi3yQS7"
 # Create your views here.
-
+@method_decorator(login_required, name='dispatch')
 class instruccionesSNI(View):
     def get(self,request):
         return render(request, 'reporteSNI/instrucciones.html')
 
-
+@method_decorator(login_required, name='dispatch')
 class reporteSNI(View):
     def get(self,request):
-        biblioteca = ""
+        modelo1 = ""
         try:
-            biblioteca = Biblioteca.objects.filter(user_id = request.user.id).exclude(numeral_id = 9)
+            modelo1 = Modelo1.objects.filter(user_id = request.user.id).exclude(numeral_id = 9)
         except:
-            biblioteca = ""
+            modelo1 = ""
     
-        return render(request, 'reporteSNI/reporteSNI.html',{'biblioteca':biblioteca})
+        return render(request, 'reporteSNI/reporteSNI.html',{'modelo1':modelo1})
 
+@method_decorator(login_required, name='dispatch')
 class metodo1ReporteSNI(View):
     def post(self,request):
         

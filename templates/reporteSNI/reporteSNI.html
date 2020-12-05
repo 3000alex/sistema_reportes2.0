@@ -20,13 +20,13 @@
     <div class="col-6 text-center">
       <p><Strong class="">Método 2</Strong></p>
       <small>Utiliza los bibcodes de los artículos registrados en su <a
-          href="{% url 'biblioteca:biblioteca_personal' %}">Biblioteca personal.</a></small>
+          href="{% url 'reportes:biblioteca_personal' %}">Biblioteca personal.</a></small>
       <p><small>Introduzca el Apellido, Nombre con el que suele publicar<br>en el siguiente formato: González,
           M.</small></p>
 
       <form action="{% url 'reporteSNI:metodo2SNI' %}">
         <input class="form-control mb-4" type="text" placeholder="Apellido, N." name="autor" required>
-        {% if biblioteca %}
+        {% if modelo1 %}
         <button disabled type="submit" data-toggle="modal" data-target="#reporteSNI"
           class="btn btn-success btn-lg pr-4 pl-4 sesion disabled">Enviar</button>
         {% else %}
